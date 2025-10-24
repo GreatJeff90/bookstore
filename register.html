@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIPORT Bookstore - Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#008753',
+                        secondary: '#F2A900',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <!-- Header -->
+        <div class="text-center">
+            <div class="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
+                <i class="fas fa-book-open text-white"></i>
+            </div>
+            <h2 class="mt-6 text-3xl font-bold text-gray-900">
+                Create your account
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                Join the UNIPORT Bookstore community
+            </p>
+        </div>
+
+        <!-- Registration Form -->
+        <form class="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-sm border" onsubmit="handleRegistration(event)">
+            <div class="space-y-4">
+                <!-- Full Name -->
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">
+                        Full Name
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                        <input
+                            id="fullName"
+                            name="fullName"
+                            type="text"
+                            required
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter your full name"
+                        >
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                        Email Address
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="student@uniport.edu.ng"
+                        >
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">Please use your university email address</p>
+                </div>
+
+                <!-- Role -->
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700 mb-1">
+                        I am a
+                    </label>
+                    <select 
+                        id="role"
+                        name="role"
+                        required
+                        class="block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent"
+                    >
+                        <option value="">Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="faculty">Faculty Member</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+
+                <!-- Department -->
+                <div>
+                    <label for="department" class="block text-sm font-medium text-gray-700 mb-1">
+                        Department
+                    </label>
+                    <select 
+                        id="department"
+                        name="department"
+                        required
+                        class="block w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent"
+                    >
+                        <option value="">Select your department</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="economics">Economics</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="medicine">Medicine</option>
+                        <option value="law">Law</option>
+                        <option value="arts">Arts & Humanities</option>
+                    </select>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Create a password"
+                        >
+                        <button
+                            type="button"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onclick="togglePassword('password')"
+                        >
+                            <i class="fas fa-eye text-gray-400" id="passwordToggle"></i>
+                        </button>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+                        Confirm Password
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            required
+                            class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Confirm your password"
+                        >
+                        <button
+                            type="button"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onclick="togglePassword('confirmPassword')"
+                        >
+                            <i class="fas fa-eye text-gray-400" id="confirmPasswordToggle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="flex items-center">
+                <input
+                    id="terms"
+                    name="terms"
+                    type="checkbox"
+                    required
+                    class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                >
+                <label for="terms" class="ml-2 block text-sm text-gray-900">
+                    I agree to the 
+                    <a href="#" class="text-primary hover:text-primary/80">Terms and Conditions</a>
+                    and 
+                    <a href="#" class="text-primary hover:text-primary/80">Privacy Policy</a>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button
+                    type="submit"
+                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                >
+                    Create Account
+                </button>
+            </div>
+
+            <!-- Login Link -->
+            <div class="text-center">
+                <span class="text-sm text-gray-600">
+                    Already have an account? 
+                    <a href="login.html" class="font-medium text-primary hover:text-primary/80">
+                        Sign in
+                    </a>
+                </span>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleIcon = document.getElementById(fieldId + 'Toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash text-gray-400';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye text-gray-400';
+            }
+        }
+
+        function handleRegistration(event) {
+            event.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const role = document.getElementById('role').value;
+            const department = document.getElementById('department').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // Validation
+            if (!email.includes('@uniport.edu.ng') && !email.includes('@')) {
+                alert('Please use your university email address (uniport.edu.ng)');
+                return;
+            }
+            
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            if (!terms) {
+                alert('Please agree to the Terms and Conditions');
+                return;
+            }
+            
+            // For demo purposes - just redirect to login page
+            alert('Registration successful! Please login with your new account.');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

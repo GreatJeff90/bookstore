@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIPORT Bookstore - Shopping Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#008753',
+                        secondary: '#F2A900',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="bg-primary text-white p-2 rounded-lg">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <span class="ml-2 text-xl font-bold text-gray-900">
+                        UNIPORT Bookstore
+                    </span>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
+                    <a href="cart.html" class="text-primary font-medium border-b-2 border-primary relative">
+                        <i class="fas fa-shopping-cart"></i> Cart
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Login</a>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 text-gray-600">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Shopping Cart</h1>
+            <p class="text-gray-600">Review your items and proceed to checkout</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-sm border">
+                    <!-- Cart Header -->
+                    <div class="border-b p-6">
+                        <h2 class="text-xl font-semibold text-gray-900">
+                            Cart Items (<span id="itemCount">0</span>)
+                        </h2>
+                    </div>
+
+                    <!-- Cart Items List -->
+                    <div id="cartItems" class="p-6">
+                        <!-- Cart items will be dynamically loaded here -->
+                        <div id="emptyCart" class="text-center py-12">
+                            <i class="fas fa-shopping-cart text-gray-400 text-6xl mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
+                            <p class="text-gray-600 mb-6">Add some books to get started</p>
+                            <a href="books.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors inline-flex items-center">
+                                <i class="fas fa-book mr-2"></i> Browse Books
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Subtotal</span>
+                            <span id="subtotal">₦0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Shipping</span>
+                            <span id="shipping">₦500</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Tax</span>
+                            <span id="tax">₦0</span>
+                        </div>
+                        <div class="border-t pt-3">
+                            <div class="flex justify-between text-lg font-semibold">
+                                <span>Total</span>
+                                <span id="total">₦0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <button 
+                        id="checkoutBtn"
+                        onclick="proceedToCheckout()"
+                        class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        disabled
+                    >
+                        Proceed to Checkout
+                    </button>
+
+                    <!-- Continue Shopping -->
+                    <a href="books.html" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-block text-center mt-3">
+                        Continue Shopping
+                    </a>
+
+                    <!-- Security Badge -->
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+                        <div class="flex justify-center items-center space-x-2 text-sm text-gray-600 mb-2">
+                            <i class="fas fa-shield-alt text-primary"></i>
+                            <span>Secure Checkout</span>
+                        </div>
+                        <p class="text-xs text-gray-500">Your payment information is encrypted and secure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        function renderCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItems = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const itemCount = document.getElementById('itemCount');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if (cart.length === 0) {
+                emptyCart.classList.remove('hidden');
+                cartItems.innerHTML = '<div id="emptyCart" class="text-center py-12">' + emptyCart.innerHTML + '</div>';
+                itemCount.textContent = '0';
+                checkoutBtn.disabled = true;
+                updateOrderSummary(0);
+                return;
+            }
+
+            emptyCart.classList.add('hidden');
+            itemCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="flex items-center space-x-4 py-4 border-b last:border-b-0">
+                    <!-- Book Image -->
+                    <div class="flex-shrink-0">
+                        <div class="bg-gray-200 w-16 h-20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-gray-400 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Book Details -->
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-900">${item.title}</h4>
+                        <p class="text-gray-600 text-sm">₦${item.price.toLocaleString()}</p>
+                    </div>
+
+                    <!-- Quantity Controls -->
+                    <div class="flex items-center space-x-2">
+                        <button 
+                            onclick="updateQuantity(${item.id}, -1)"
+                            class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                        >
+                            <i class="fas fa-minus text-gray-600 text-xs"></i>
+                        </button>
+                        <span class="w-8 text-center font-semibold">${item.quantity}</span>
+                        <button 
+                            onclick="updateQuantity(${item.id}, 1)"
+                            class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                        >
+                            <i class="fas fa-plus text-gray-600 text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Item Total -->
+                    <div class="text-right">
+                        <div class="font-semibold text-gray-900">₦${(item.price * item.quantity).toLocaleString()}</div>
+                        <button 
+                            onclick="removeFromCart(${item.id})"
+                            class="text-red-600 hover:text-red-800 text-sm mt-1"
+                        >
+                            <i class="fas fa-trash mr-1"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            updateOrderSummary(subtotal);
+            checkoutBtn.disabled = false;
+        }
+
+        function updateQuantity(bookId, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemIndex = cart.findIndex(item => item.id === bookId);
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity += change;
+                
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+                updateCartCount();
+            }
+        }
+
+        function removeFromCart(bookId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.id !== bookId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+            updateCartCount();
+        }
+
+        function updateOrderSummary(subtotal) {
+            const shipping = 500;
+            const tax = Math.round(subtotal * 0.075); // 7.5% tax
+            const total = subtotal + shipping + tax;
+
+            document.getElementById('subtotal').textContent = `₦${subtotal.toLocaleString()}`;
+            document.getElementById('tax').textContent = `₦${tax.toLocaleString()}`;
+            document.getElementById('total').textContent = `₦${total.toLocaleString()}`;
+        }
+
+        function proceedToCheckout() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+
+            // For demo purposes - just show an alert
+            const total = document.getElementById('total').textContent;
+            alert(`Proceeding to checkout with total: ${total}\n\nIn a real application, this would redirect to Paystack payment.`);
+            
+            // In real implementation:
+            // window.location.href = 'checkout.html';
+        }
+
+        // Initialize cart on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCart();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIPORT Bookstore - Book Catalog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#008753',
+                        secondary: '#F2A900',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="bg-primary text-white p-2 rounded-lg">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <span class="ml-2 text-xl font-bold text-gray-900">
+                        UNIPORT Bookstore
+                    </span>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+                    <a href="books.html" class="text-primary font-medium border-b-2 border-primary">Books</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative">
+                        <i class="fas fa-shopping-cart"></i> Cart
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Login</a>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 text-gray-600">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Book Catalog</h1>
+            <p class="text-gray-600">Find your course materials and textbooks</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <!-- Search Bar -->
+                <div class="lg:col-span-2">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Search by title, author, ISBN, or course..."
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        >
+                    </div>
+                </div>
+
+                <!-- Department Filter -->
+                <div>
+                    <select id="departmentFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">All Departments</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="economics">Economics</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="medicine">Medicine</option>
+                    </select>
+                </div>
+
+                <!-- Course Filter -->
+                <div>
+                    <select id="courseFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">All Courses</option>
+                        <option value="csc101">CSC 101</option>
+                        <option value="mat201">MAT 201</option>
+                        <option value="eco101">ECO 101</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Additional Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <!-- Price Range -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                    <select id="priceFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">All Prices</option>
+                        <option value="0-3000">₦0 - ₦3,000</option>
+                        <option value="3001-6000">₦3,001 - ₦6,000</option>
+                        <option value="6001-10000">₦6,001 - ₦10,000</option>
+                        <option value="10001+">₦10,000+</option>
+                    </select>
+                </div>
+
+                <!-- Format -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
+                    <select id="formatFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">All Formats</option>
+                        <option value="physical">Physical Copy</option>
+                        <option value="digital">Digital Copy</option>
+                    </select>
+                </div>
+
+                <!-- Sort By -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <select id="sortFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="relevance">Relevance</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="booksGrid">
+            <!-- Books will be dynamically loaded here -->
+        </div>
+
+        <!-- Loading and No Results -->
+        <div id="loading" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading books...</p>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-12">
+            <i class="fas fa-search text-gray-400 text-6xl mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">No books found</h3>
+            <p class="text-gray-600">Try adjusting your search or filters</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample book data
+        const books = [
+            {
+                id: 1,
+                title: "Introduction to Computer Science",
+                author: "Dr. John Smith",
+                price: 4500,
+                rating: 4.5,
+                department: "computer-science",
+                course: "csc101",
+                format: "physical",
+                isbn: "978-0123456789",
+                stock: 15,
+                image: "book-placeholder.jpg"
+            },
+            {
+                id: 2,
+                title: "Advanced Mathematics",
+                author: "Prof. Jane Doe",
+                price: 5200,
+                rating: 4.2,
+                department: "mathematics",
+                course: "mat201",
+                format: "physical",
+                isbn: "978-0123456790",
+                stock: 8,
+                image: "book-placeholder.jpg"
+            },
+            {
+                id: 3,
+                title: "Principles of Economics",
+                author: "Dr. James Wilson",
+                price: 3800,
+                rating: 4.7,
+                department: "economics",
+                course: "eco101",
+                format: "digital",
+                isbn: "978-0123456791",
+                stock: 25,
+                image: "book-placeholder.jpg"
+            },
+            {
+                id: 4,
+                title: "Data Structures and Algorithms",
+                author: "Dr. Sarah Johnson",
+                price: 6200,
+                rating: 4.8,
+                department: "computer-science",
+                course: "csc201",
+                format: "physical",
+                isbn: "978-0123456792",
+                stock: 12,
+                image: "book-placeholder.jpg"
+            },
+            {
+                id: 5,
+                title: "Calculus Made Easy",
+                author: "Prof. Michael Brown",
+                price: 4100,
+                rating: 4.3,
+                department: "mathematics",
+                course: "mat101",
+                format: "physical",
+                isbn: "978-0123456793",
+                stock: 20,
+                image: "book-placeholder.jpg"
+            },
+            {
+                id: 6,
+                title: "Microeconomic Theory",
+                author: "Dr. Emily Davis",
+                price: 4800,
+                rating: 4.6,
+                department: "economics",
+                course: "eco201",
+                format: "digital",
+                isbn: "978-0123456794",
+                stock: 18,
+                image: "book-placeholder.jpg"
+            }
+        ];
+
+        function renderBooks(booksToRender) {
+            const booksGrid = document.getElementById('booksGrid');
+            const loading = document.getElementById('loading');
+            const noResults = document.getElementById('noResults');
+
+            loading.classList.add('hidden');
+            
+            if (booksToRender.length === 0) {
+                noResults.classList.remove('hidden');
+                booksGrid.innerHTML = '';
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            
+            booksGrid.innerHTML = booksToRender.map(book => `
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow book-card">
+                    <div class="p-4">
+                        <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
+                            <i class="fas fa-book text-gray-400 text-6xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 line-clamp-2">${book.title}</h3>
+                        <p class="text-gray-600 text-sm mb-2">${book.author}</p>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center">
+                                ${generateStars(book.rating)}
+                                <span class="ml-1 text-sm text-gray-600">${book.rating}</span>
+                            </div>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${book.department}</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-bold text-primary text-lg">₦${book.price.toLocaleString()}</span>
+                            <span class="text-sm text-gray-500">Stock: ${book.stock}</span>
+                        </div>
+                        <button 
+                            onclick="addToCart(${book.id}, '${book.title.replace(/'/g, "\\'")}', ${book.price})"
+                            class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center"
+                            ${book.stock === 0 ? 'disabled' : ''}
+                        >
+                            ${book.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateStars(rating) {
+            const stars = [];
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars.push('<i class="fas fa-star text-yellow-400 text-sm"></i>');
+            }
+            
+            if (hasHalfStar) {
+                stars.push('<i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>');
+            }
+            
+            const emptyStars = 5 - stars.length;
+            for (let i = 0; i < emptyStars; i++) {
+                stars.push('<i class="far fa-star text-yellow-400 text-sm"></i>');
+            }
+            
+            return stars.join('');
+        }
+
+        function filterBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const department = document.getElementById('departmentFilter').value;
+            const course = document.getElementById('courseFilter').value;
+            const priceRange = document.getElementById('priceFilter').value;
+            const format = document.getElementById('formatFilter').value;
+
+            const filteredBooks = books.filter(book => {
+                const matchesSearch = !searchTerm || 
+                    book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm) ||
+                    book.isbn.includes(searchTerm);
+                
+                const matchesDepartment = !department || book.department === department;
+                const matchesCourse = !course || book.course === course;
+                const matchesFormat = !format || book.format === format;
+                
+                let matchesPrice = true;
+                if (priceRange) {
+                    const [min, max] = priceRange.split('-').map(val => val.endsWith('+') ? Infinity : parseInt(val));
+                    matchesPrice = book.price >= min && book.price <= max;
+                }
+                
+                return matchesSearch && matchesDepartment && matchesCourse && matchesPrice && matchesFormat;
+            });
+
+            renderBooks(filteredBooks);
+        }
+
+        // Event listeners for filters
+        document.getElementById('searchInput').addEventListener('input', filterBooks);
+        document.getElementById('departmentFilter').addEventListener('change', filterBooks);
+        document.getElementById('courseFilter').addEventListener('change', filterBooks);
+        document.getElementById('priceFilter').addEventListener('change', filterBooks);
+        document.getElementById('formatFilter').addEventListener('change', filterBooks);
+        document.getElementById('sortFilter').addEventListener('change', filterBooks);
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                renderBooks(books);
+            }, 1000); // Simulate loading delay
+        });
+    </script>
+</body>
+</html>

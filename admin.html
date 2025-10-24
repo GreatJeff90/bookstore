@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIPORT Bookstore - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#008753',
+                        secondary: '#F2A900',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="bg-primary text-white p-2 rounded-lg">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <span class="ml-2 text-xl font-bold text-gray-900">
+                        UNIPORT Bookstore
+                    </span>
+                    <span class="ml-2 text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">Admin</span>
+                </div>
+
+                <!-- Admin Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Store Front</a>
+                    <a href="admin.html" class="text-primary font-medium border-b-2 border-primary">Dashboard</a>
+                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Logout</a>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 text-gray-600">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+            <p class="text-gray-600">Manage your bookstore operations</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Sales -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center">
+                    <div class="bg-green-100 p-3 rounded-lg">
+                        <i class="fas fa-money-bill-wave text-green-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Sales</p>
+                        <p class="text-2xl font-bold text-gray-900">₦248,500</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-arrow-up"></i> 12.5%
+                    </span>
+                    <span class="text-gray-500 text-sm ml-2">from last month</span>
+                </div>
+            </div>
+
+            <!-- Total Orders -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center">
+                    <div class="bg-blue-100 p-3 rounded-lg">
+                        <i class="fas fa-shopping-cart text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                        <p class="text-2xl font-bold text-gray-900">156</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-arrow-up"></i> 8.2%
+                    </span>
+                    <span class="text-gray-500 text-sm ml-2">from last month</span>
+                </div>
+            </div>
+
+            <!-- Total Books -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center">
+                    <div class="bg-purple-100 p-3 rounded-lg">
+                        <i class="fas fa-book text-purple-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Books</p>
+                        <p class="text-2xl font-bold text-gray-900">342</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-arrow-up"></i> 5.3%
+                    </span>
+                    <span class="text-gray-500 text-sm ml-2">from last month</span>
+                </div>
+            </div>
+
+            <!-- Low Stock -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center">
+                    <div class="bg-red-100 p-3 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Low Stock</p>
+                        <p class="text-2xl font-bold text-gray-900">8</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-red-600 text-sm font-medium">Needs attention</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Quick Actions -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button onclick="showAddBookModal()" class="w-full bg-primary text-white py-2 px-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center">
+                            <i class="fas fa-plus mr-2"></i> Add New Book
+                        </button>
+                        <button class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            <i class="fas fa-file-export mr-2"></i> Export Reports
+                        </button>
+                        <button class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            <i class="fas fa-users mr-2"></i> Manage Users
+                        </button>
+                        <button class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                            <i class="fas fa-cog mr-2"></i> Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 mt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="bg-green-100 p-2 rounded-lg">
+                                <i class="fas fa-shopping-cart text-green-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">New order received</p>
+                                <p class="text-xs text-gray-500">2 minutes ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-lg">
+                                <i class="fas fa-user-plus text-blue-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">New user registered</p>
+                                <p class="text-xs text-gray-500">1 hour ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-yellow-100 p-2 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Low stock alert</p>
+                                <p class="text-xs text-gray-500">2 hours ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders and Low Stock -->
+            <div class="lg:col-span-2">
+                <!-- Recent Orders -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Orders</h3>
+                        <a href="#" class="text-primary hover:text-primary/80 text-sm font-medium">View All</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="text-left py-2 text-sm font-medium text-gray-600">Order ID</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-600">Customer</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-600">Amount</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-600">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-3 text-sm">#ORD-0012</td>
+                                    <td class="py-3 text-sm">john.doe@uniport.edu.ng</td>
+                                    <td class="py-3 text-sm">₦12,400</td>
+                                    <td class="py-3 text-sm">
+                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Delivered</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 text-sm">#ORD-0011</td>
+                                    <td class="py-3 text-sm">sarah.wilson@uniport.edu.ng</td>
+                                    <td class="py-3 text-sm">₦8,900</td>
+                                    <td class="py-3 text-sm">
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Processing</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-3 text-sm">#ORD-0010</td>
+                                    <td class="py-3 text-sm">mike.brown@uniport.edu.ng</td>
+                                    <td class="py-3 text-sm">₦15,200</td>
+                                    <td class="py-3 text-sm">
+                                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Shipped</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Low Stock Alert -->
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Low Stock Alert</h3>
+                        <a href="#" class="text-primary hover:text-primary/80 text-sm font-medium">Manage Inventory</a>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-gray-900">Advanced Mathematics</p>
+                                <p class="text-sm text-gray-600">Stock: 3 copies</p>
+                            </div>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-sm hover:bg-primary/90">
+                                Restock
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-gray-900">Physics for Engineers</p>
+                                <p class="text-sm text-gray-600">Stock: 5 copies</p>
+                            </div>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-sm hover:bg-primary/90">
+                                Restock
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div id="addBookModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Add New Book</h3>
+                    <button onclick="hideAddBookModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form onsubmit="handleAddBook(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Book Title</label>
+                        <input type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+                        <input type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                            <input type="number" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+                            <input type="number" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideAddBookModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                            Add Book
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script>
+        function showAddBookModal() {
+            document.getElementById('addBookModal').classList.remove('hidden');
+        }
+
+        function hideAddBookModal() {
+            document.getElementById('addBookModal').classList.add('hidden');
+        }
+
+        function handleAddBook(event) {
+            event.preventDefault();
+            // Handle book addition logic here
+            alert('Book added successfully!');
+            hideAddBookModal();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('addBookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideAddBookModal();
+            }
+        });
+    </script>
+</body>
+</html>
