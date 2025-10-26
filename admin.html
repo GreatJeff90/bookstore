@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#008753',
+                        primary: '#0000ff',
                         secondary: '#F2A900',
                     }
                 }
@@ -26,8 +26,8 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <div class="bg-primary text-white p-2 rounded-lg">
-                        <i class="fas fa-book-open"></i>
+                    <div class="text-white p-2 rounded-lg">
+                        <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
                     <span class="ml-2 text-xl font-bold text-gray-900">
                         UNIPORT Bookstore
@@ -39,7 +39,7 @@
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Store Front</a>
                     <a href="admin.html" class="text-primary font-medium border-b-2 border-primary">Dashboard</a>
-                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Logout</a>
+                    <a href="#" onclick="logout()" class="text-gray-700 hover:text-primary font-medium">Logout</a>
                 </nav>
 
                 <!-- Mobile menu button -->
@@ -67,12 +67,12 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Total Sales</p>
-                        <p class="text-2xl font-bold text-gray-900">₦248,500</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalSales">₦0</p>
                     </div>
                 </div>
                 <div class="mt-4">
                     <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up"></i> 12.5%
+                        <i class="fas fa-arrow-up"></i> <span id="salesGrowth">0%</span>
                     </span>
                     <span class="text-gray-500 text-sm ml-2">from last month</span>
                 </div>
@@ -86,12 +86,12 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Total Orders</p>
-                        <p class="text-2xl font-bold text-gray-900">156</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalOrders">0</p>
                     </div>
                 </div>
                 <div class="mt-4">
                     <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up"></i> 8.2%
+                        <i class="fas fa-arrow-up"></i> <span id="ordersGrowth">0%</span>
                     </span>
                     <span class="text-gray-500 text-sm ml-2">from last month</span>
                 </div>
@@ -105,12 +105,12 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Total Books</p>
-                        <p class="text-2xl font-bold text-gray-900">342</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalBooks">0</p>
                     </div>
                 </div>
                 <div class="mt-4">
                     <span class="text-green-600 text-sm font-medium">
-                        <i class="fas fa-arrow-up"></i> 5.3%
+                        <i class="fas fa-arrow-up"></i> <span id="booksGrowth">0%</span>
                     </span>
                     <span class="text-gray-500 text-sm ml-2">from last month</span>
                 </div>
@@ -124,11 +124,11 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Low Stock</p>
-                        <p class="text-2xl font-bold text-gray-900">8</p>
+                        <p class="text-2xl font-bold text-gray-900" id="lowStockCount">0</p>
                     </div>
                 </div>
                 <div class="mt-4">
-                    <span class="text-red-600 text-sm font-medium">Needs attention</span>
+                    <span class="text-red-600 text-sm font-medium" id="stockAlert">All good</span>
                 </div>
             </div>
         </div>
@@ -142,13 +142,13 @@
                         <button onclick="showAddBookModal()" class="w-full bg-primary text-white py-2 px-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center">
                             <i class="fas fa-plus mr-2"></i> Add New Book
                         </button>
-                        <button class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        <button onclick="exportReports()" class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
                             <i class="fas fa-file-export mr-2"></i> Export Reports
                         </button>
-                        <button class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        <button onclick="manageUsers()" class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
                             <i class="fas fa-users mr-2"></i> Manage Users
                         </button>
-                        <button class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        <button onclick="showSettings()" class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center">
                             <i class="fas fa-cog mr-2"></i> Settings
                         </button>
                     </div>
@@ -157,34 +157,8 @@
                 <!-- Recent Activity -->
                 <div class="bg-white rounded-lg shadow-sm border p-6 mt-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <div class="bg-green-100 p-2 rounded-lg">
-                                <i class="fas fa-shopping-cart text-green-600"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">New order received</p>
-                                <p class="text-xs text-gray-500">2 minutes ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-lg">
-                                <i class="fas fa-user-plus text-blue-600"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">New user registered</p>
-                                <p class="text-xs text-gray-500">1 hour ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-yellow-100 p-2 rounded-lg">
-                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">Low stock alert</p>
-                                <p class="text-xs text-gray-500">2 hours ago</p>
-                            </div>
-                        </div>
+                    <div class="space-y-4" id="recentActivity">
+                        <!-- Activity will be loaded dynamically -->
                     </div>
                 </div>
             </div>
@@ -195,7 +169,7 @@
                 <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold text-gray-900">Recent Orders</h3>
-                        <a href="#" class="text-primary hover:text-primary/80 text-sm font-medium">View All</a>
+                        <button onclick="viewAllOrders()" class="text-primary hover:text-primary/80 text-sm font-medium">View All</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -205,33 +179,11 @@
                                     <th class="text-left py-2 text-sm font-medium text-gray-600">Customer</th>
                                     <th class="text-left py-2 text-sm font-medium text-gray-600">Amount</th>
                                     <th class="text-left py-2 text-sm font-medium text-gray-600">Status</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-600">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="border-b">
-                                    <td class="py-3 text-sm">#ORD-0012</td>
-                                    <td class="py-3 text-sm">john.doe@uniport.edu.ng</td>
-                                    <td class="py-3 text-sm">₦12,400</td>
-                                    <td class="py-3 text-sm">
-                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Delivered</span>
-                                    </td>
-                                </tr>
-                                <tr class="border-b">
-                                    <td class="py-3 text-sm">#ORD-0011</td>
-                                    <td class="py-3 text-sm">sarah.wilson@uniport.edu.ng</td>
-                                    <td class="py-3 text-sm">₦8,900</td>
-                                    <td class="py-3 text-sm">
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Processing</span>
-                                    </td>
-                                </tr>
-                                <tr class="border-b">
-                                    <td class="py-3 text-sm">#ORD-0010</td>
-                                    <td class="py-3 text-sm">mike.brown@uniport.edu.ng</td>
-                                    <td class="py-3 text-sm">₦15,200</td>
-                                    <td class="py-3 text-sm">
-                                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Shipped</span>
-                                    </td>
-                                </tr>
+                            <tbody id="recentOrdersTable">
+                                <!-- Orders will be loaded dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -241,27 +193,10 @@
                 <div class="bg-white rounded-lg shadow-sm border p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold text-gray-900">Low Stock Alert</h3>
-                        <a href="#" class="text-primary hover:text-primary/80 text-sm font-medium">Manage Inventory</a>
+                        <button onclick="manageInventory()" class="text-primary hover:text-primary/80 text-sm font-medium">Manage Inventory</button>
                     </div>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                            <div>
-                                <p class="font-medium text-gray-900">Advanced Mathematics</p>
-                                <p class="text-sm text-gray-600">Stock: 3 copies</p>
-                            </div>
-                            <button class="bg-primary text-white px-3 py-1 rounded text-sm hover:bg-primary/90">
-                                Restock
-                            </button>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                            <div>
-                                <p class="font-medium text-gray-900">Physics for Engineers</p>
-                                <p class="text-sm text-gray-600">Stock: 5 copies</p>
-                            </div>
-                            <button class="bg-primary text-white px-3 py-1 rounded text-sm hover:bg-primary/90">
-                                Restock
-                            </button>
-                        </div>
+                    <div class="space-y-3" id="lowStockAlerts">
+                        <!-- Low stock items will be loaded dynamically -->
                     </div>
                 </div>
             </div>
@@ -270,7 +205,7 @@
 
     <!-- Add Book Modal -->
     <div id="addBookModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-gray-900">Add New Book</h3>
@@ -279,38 +214,87 @@
                     </button>
                 </div>
                 
-                <form onsubmit="handleAddBook(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Book Title</label>
-                        <input type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Author</label>
-                        <input type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
+                <form id="addBookForm" onsubmit="handleAddBook(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                            <input type="number" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Book Title *</label>
+                            <input type="text" name="title" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Author *</label>
+                            <input type="text" name="author" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Price (₦) *</label>
+                            <input type="number" name="price" required min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
-                            <input type="number" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Stock *</label>
+                            <input type="number" name="stock" required min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Department *</label>
+                            <select name="department" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">Select Department</option>
+                                <option value="computer-science">Computer Science</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="economics">Economics</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="medicine">Medicine</option>
+                                <option value="law">Law</option>
+                                <option value="arts">Arts & Humanities</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Course Code</label>
+                            <input type="text" name="course" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="e.g., CSC 101">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
+                            <input type="text" name="isbn" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Format</label>
+                            <select name="format" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="physical">Physical Copy</option>
+                                <option value="digital">Digital Copy</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea name="description" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="hideAddBookModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        <button type="button" onclick="hideAddBookModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                             Cancel
                         </button>
-                        <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
-                            Add Book
+                        <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Add Book
                         </button>
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transform transition-transform duration-300">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-check"></i>
+            <span id="toastMessage">Operation completed successfully!</span>
         </div>
     </div>
 
@@ -319,20 +303,309 @@
         <!-- Same footer as index.html -->
     </footer>
 
+    <script src="js/main.js"></script>
     <script>
+        // Admin Data Management
+        let adminData = JSON.parse(localStorage.getItem('adminData')) || {
+            books: [],
+            orders: [],
+            users: [],
+            settings: {},
+            lastUpdated: new Date().toISOString()
+        };
+
+        // Initialize admin dashboard
+        function initAdminDashboard() {
+            loadStats();
+            loadRecentOrders();
+            loadLowStockAlerts();
+            loadRecentActivity();
+            checkAdminAccess();
+        }
+
+        function checkAdminAccess() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user || user.role !== 'admin') {
+                alert('Access denied. Admin privileges required.');
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        function loadStats() {
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            // Calculate total sales
+            const totalSales = orders.reduce((sum, order) => {
+                const amount = parseInt(order.total.replace('₦', '').replace(',', '')) || 0;
+                return sum + amount;
+            }, 0);
+            
+            // Calculate total orders
+            const totalOrders = orders.length;
+            
+            // Calculate total books
+            const totalBooks = books.length;
+            
+            // Find low stock items
+            const lowStockItems = books.filter(book => book.stock < 10);
+            const lowStockCount = lowStockItems.length;
+            
+            // Update UI
+            document.getElementById('totalSales').textContent = `₦${totalSales.toLocaleString()}`;
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('totalBooks').textContent = totalBooks;
+            document.getElementById('lowStockCount').textContent = lowStockCount;
+            
+            // Update growth indicators (mock data for demo)
+            document.getElementById('salesGrowth').textContent = '12.5%';
+            document.getElementById('ordersGrowth').textContent = '8.2%';
+            document.getElementById('booksGrowth').textContent = '5.3%';
+            
+            // Update stock alert
+            const stockAlert = document.getElementById('stockAlert');
+            if (lowStockCount > 0) {
+                stockAlert.textContent = 'Needs attention';
+                stockAlert.className = 'text-red-600 text-sm font-medium';
+            } else {
+                stockAlert.textContent = 'All good';
+                stockAlert.className = 'text-green-600 text-sm font-medium';
+            }
+        }
+
+        function loadRecentOrders() {
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const recentOrders = orders.slice(-5).reverse(); // Get last 5 orders
+            
+            const ordersTable = document.getElementById('recentOrdersTable');
+            
+            if (recentOrders.length === 0) {
+                ordersTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-4 text-center text-gray-500">
+                            No orders found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            ordersTable.innerHTML = recentOrders.map(order => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 text-sm font-medium">${order.id}</td>
+                    <td class="py-3 text-sm">${order.shippingInfo.email}</td>
+                    <td class="py-3 text-sm">${order.total}</td>
+                    <td class="py-3 text-sm">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                            order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                            'bg-gray-100 text-gray-800'
+                        }">
+                            ${order.status || 'confirmed'}
+                        </span>
+                    </td>
+                    <td class="py-3 text-sm">
+                        <button onclick="updateOrderStatus('${order.id}')" class="text-primary hover:text-primary/80 mr-2" title="Update Status">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="viewOrderDetails('${order.id}')" class="text-gray-600 hover:text-gray-800" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadLowStockAlerts() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const lowStockItems = books.filter(book => book.stock < 10);
+            
+            const lowStockContainer = document.getElementById('lowStockAlerts');
+            
+            if (lowStockItems.length === 0) {
+                lowStockContainer.innerHTML = `
+                    <div class="text-center py-4 text-gray-500">
+                        <i class="fas fa-check-circle text-green-400 text-2xl mb-2"></i>
+                        <p>All items are well stocked</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            lowStockContainer.innerHTML = lowStockItems.map(book => `
+                <div class="flex items-center justify-between p-3 ${
+                    book.stock < 5 ? 'bg-red-50' : 'bg-yellow-50'
+                } rounded-lg">
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-900">${book.title}</p>
+                        <p class="text-sm text-gray-600">Stock: ${book.stock} copies</p>
+                        <p class="text-xs text-gray-500">ISBN: ${book.isbn || 'N/A'}</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="restockBook(${book.id})" class="bg-primary text-white px-3 py-1 rounded text-sm hover:bg-primary/90 transition-colors">
+                            Restock
+                        </button>
+                        <button onclick="editBook(${book.id})" class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 transition-colors">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadRecentActivity() {
+            const activity = [
+                { type: 'order', message: 'New order received', time: '2 minutes ago', icon: 'shopping-cart', color: 'green' },
+                { type: 'user', message: 'New user registered', time: '1 hour ago', icon: 'user-plus', color: 'blue' },
+                { type: 'stock', message: 'Low stock alert', time: '2 hours ago', icon: 'exclamation-triangle', color: 'yellow' },
+                { type: 'book', message: 'New book added', time: '3 hours ago', icon: 'book', color: 'purple' }
+            ];
+            
+            const activityContainer = document.getElementById('recentActivity');
+            activityContainer.innerHTML = activity.map(item => `
+                <div class="flex items-start">
+                    <div class="bg-${item.color}-100 p-2 rounded-lg">
+                        <i class="fas fa-${item.icon} text-${item.color}-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-900">${item.message}</p>
+                        <p class="text-xs text-gray-500">${item.time}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Book Management
         function showAddBookModal() {
             document.getElementById('addBookModal').classList.remove('hidden');
         }
 
         function hideAddBookModal() {
             document.getElementById('addBookModal').classList.add('hidden');
+            document.getElementById('addBookForm').reset();
         }
 
         function handleAddBook(event) {
             event.preventDefault();
-            // Handle book addition logic here
-            alert('Book added successfully!');
+            const formData = new FormData(event.target);
+            
+            const newBook = {
+                id: Date.now(),
+                title: formData.get('title'),
+                author: formData.get('author'),
+                price: parseInt(formData.get('price')),
+                stock: parseInt(formData.get('stock')),
+                department: formData.get('department'),
+                course: formData.get('course'),
+                isbn: formData.get('isbn'),
+                format: formData.get('format'),
+                description: formData.get('description'),
+                rating: 4.5,
+                reviews: 0,
+                pages: 300,
+                publisher: 'UNIPORT Press'
+            };
+            
+            // Get existing books
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            books.push(newBook);
+            localStorage.setItem('books', JSON.stringify(books));
+            
             hideAddBookModal();
+            showToast('Book added successfully!');
+            
+            // Refresh data
+            loadStats();
+            loadLowStockAlerts();
+            loadRecentActivity();
+        }
+
+        function restockBook(bookId) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const bookIndex = books.findIndex(book => book.id === bookId);
+            
+            if (bookIndex !== -1) {
+                const additionalStock = parseInt(prompt(`Enter additional stock for "${books[bookIndex].title}":`, "10"));
+                
+                if (!isNaN(additionalStock) && additionalStock > 0) {
+                    books[bookIndex].stock += additionalStock;
+                    localStorage.setItem('books', JSON.stringify(books));
+                    
+                    showToast(`Restocked ${additionalStock} copies of "${books[bookIndex].title}"`);
+                    loadStats();
+                    loadLowStockAlerts();
+                }
+            }
+        }
+
+        function editBook(bookId) {
+            alert(`Edit book functionality for book ID: ${bookId} would open here.`);
+            // In a full implementation, this would open an edit modal
+        }
+
+        // Order Management
+        function updateOrderStatus(orderId) {
+            const newStatus = prompt('Enter new status (confirmed/shipped/delivered):', 'shipped');
+            if (newStatus && ['confirmed', 'shipped', 'delivered'].includes(newStatus)) {
+                const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+                const orderIndex = orders.findIndex(order => order.id === orderId);
+                
+                if (orderIndex !== -1) {
+                    orders[orderIndex].status = newStatus;
+                    localStorage.setItem('userOrders', JSON.stringify(orders));
+                    
+                    showToast(`Order ${orderId} status updated to ${newStatus}`);
+                    loadRecentOrders();
+                }
+            }
+        }
+
+        function viewOrderDetails(orderId) {
+            alert(`View order details for: ${orderId}\n\nThis would show complete order information.`);
+        }
+
+        function viewAllOrders() {
+            alert('This would navigate to a comprehensive orders management page.');
+        }
+
+        // Other Admin Functions
+        function exportReports() {
+            showToast('Reports exported successfully!');
+            // In real implementation, this would generate and download CSV/PDF reports
+        }
+
+        function manageUsers() {
+            alert('This would open user management interface.');
+        }
+
+        function manageInventory() {
+            alert('This would open comprehensive inventory management.');
+        }
+
+        function showSettings() {
+            alert('This would open admin settings panel.');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Utility Functions
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
         }
 
         // Close modal when clicking outside
@@ -340,6 +613,11 @@
             if (e.target === this) {
                 hideAddBookModal();
             }
+        });
+
+        // Initialize admin dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initAdminDashboard();
         });
     </script>
 </body>

@@ -20,7 +20,7 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#008753', // UNIPORT Green
+                        primary: '#0000ff', // UNIPORT Green
                         secondary: '#F2A900', // UNIPORT Gold
                     }
                 }
@@ -35,8 +35,8 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <div class="bg-primary text-white p-2 rounded-lg">
-                        <i class="fas fa-book-open text-white"></i>
+                    <div class=" text-white p-2 rounded-lg">
+                        <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
                     <span class="ml-2 text-xl font-bold text-gray-900">
                         UNIPORT Bookstore
@@ -44,14 +44,18 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
-                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
-                    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium">
-                        <i class="fas fa-shopping-cart"></i> Cart
-                    </a>
-                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium">Login</a>
-                </nav>
+               <!-- Enhanced Navigation for all pages -->
+<nav class="hidden md:flex items-center space-x-8">
+    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
+    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative">
+        <i class="fas fa-shopping-cart"></i> Cart
+        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+    </a>
+    <div class="relative group" id="authSection">
+        <!-- This will be populated by JavaScript -->
+    </div>
+</nav>
 
                 <!-- Mobile menu button -->
                 <button class="md:hidden p-2 text-gray-600">

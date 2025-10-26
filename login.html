@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#008753',
+                        primary: '#0000ff',
                         secondary: '#F2A900',
                     }
                 }
@@ -23,8 +23,8 @@
     <div class="max-w-md w-full space-y-8">
         <!-- Header -->
         <div class="text-center">
-            <div class="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
-                <i class="fas fa-book-open text-white"></i>
+            <div class="mx-auto h-12 w-12 rounded-lg flex items-center justify-center">
+                                       <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
             </div>
             <h2 class="mt-6 text-3xl font-bold text-gray-900">
                 Sign in to your account
@@ -129,40 +129,120 @@
     </div>
 
     <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const passwordToggle = document.getElementById('passwordToggle');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordToggle.className = 'fas fa-eye-slash text-gray-400';
-            } else {
-                passwordInput.type = 'password';
-                passwordToggle.className = 'fas fa-eye text-gray-400';
-            }
-        }
+        // Update the script section in login.html
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.getElementById('passwordToggle');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordToggle.className = 'fas fa-eye-slash text-gray-400';
+    } else {
+        passwordInput.type = 'password';
+        passwordToggle.className = 'fas fa-eye text-gray-400';
+    }
+}
 
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Simple validation
-            if (!email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long');
-                return;
-            }
-            
-            // For demo purposes - just redirect to home page
-            alert('Login successful! Redirecting...');
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('remember-me').checked;
+    
+    // Simple validation
+    if (!email.includes('@')) {
+        showError('Please enter a valid email address');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showError('Password must be at least 6 characters long');
+        return;
+    }
+    
+    // Get existing users from localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    // Find user by email
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        // Create user session
+        const userSession = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            department: user.department,
+            loggedIn: true,
+            loginTime: new Date().toISOString()
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('currentUser', JSON.stringify(userSession));
+        
+        // Show success message
+        showSuccess('Login successful! Redirecting...');
+        
+        // Redirect to home page after delay
+        setTimeout(() => {
             window.location.href = 'index.html';
-        }
+        }, 1500);
+        
+    } else {
+        showError('Invalid email or password. Please try again.');
+    }
+}
+
+function showError(message) {
+    // Remove existing alerts
+    const existingAlert = document.querySelector('.alert-message');
+    if (existingAlert) {
+        existingAlert.remove();
+    }
+    
+    const alertHTML = `
+        <div class="alert-message bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    const form = document.querySelector('form');
+    form.insertAdjacentHTML('afterbegin', alertHTML);
+}
+
+function showSuccess(message) {
+    // Remove existing alerts
+    const existingAlert = document.querySelector('.alert-message');
+    if (existingAlert) {
+        existingAlert.remove();
+    }
+    
+    const alertHTML = `
+        <div class="alert-message bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-4 flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    const form = document.querySelector('form');
+    form.insertAdjacentHTML('afterbegin', alertHTML);
+}
+
+// Check if user is already logged in
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user && user.loggedIn) {
+        window.location.href = 'index.html';
+    }
+});
+
+// Add this to every page
+document.addEventListener('DOMContentLoaded', function() {
+    updateNavigation();
+});
     </script>
 </body>
 </html>

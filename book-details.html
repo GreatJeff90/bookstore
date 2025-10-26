@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIPORT Bookstore - Book Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0000ff',
+                        secondary: '#F2A900',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="text-white p-2 rounded-lg">
+                                               <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
+                    </div>
+                    <span class="ml-2 text-xl font-bold text-gray-900">
+                        UNIPORT Bookstore
+                    </span>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
+                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative">
+                        <i class="fas fa-shopping-cart"></i> Cart
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+                    </a>
+                    <div class="relative group" id="authSection">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 text-gray-600">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-sm text-gray-600">
+                <li><a href="index.html" class="hover:text-primary">Home</a></li>
+                <li><i class="fas fa-chevron-right text-gray-400 text-xs"></i></li>
+                <li><a href="books.html" class="hover:text-primary">Books</a></li>
+                <li><i class="fas fa-chevron-right text-gray-400 text-xs"></i></li>
+                <li class="text-gray-900" id="breadcrumbTitle">Book Details</li>
+            </ol>
+        </nav>
+
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading book details...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="hidden text-center py-12">
+            <i class="fas fa-exclamation-triangle text-gray-400 text-6xl mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Book Not Found</h3>
+            <p class="text-gray-600 mb-6">The book you're looking for doesn't exist.</p>
+            <a href="books.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors inline-flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Books
+            </a>
+        </div>
+
+        <!-- Book Content -->
+        <div id="bookContent" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Column - Book Images -->
+                <div>
+                    <!-- Main Image -->
+                    <div class="bg-white rounded-lg shadow-sm border p-8 mb-4">
+                        <div class="bg-gray-200 h-96 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-gray-400 text-8xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Thumbnail Images -->
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer border-2 border-primary">
+                            <i class="fas fa-book text-gray-400 text-2xl"></i>
+                        </div>
+                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-book-open text-gray-400 text-2xl"></i>
+                        </div>
+                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-book text-gray-400 text-2xl"></i>
+                        </div>
+                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-book-open text-gray-400 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Book Details -->
+                <div>
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <!-- Book Title & Author -->
+                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2" id="bookTitle">Loading...</h1>
+                        <p class="text-lg text-gray-600 mb-4" id="bookAuthor">by Loading...</p>
+
+                        <!-- Rating -->
+                        <div class="flex items-center mb-4">
+                            <div class="flex items-center" id="starRating">
+                                <!-- Stars will be dynamically generated -->
+                            </div>
+                            <span class="ml-2 text-gray-600" id="bookRating">(0 reviews)</span>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold text-primary" id="bookPrice">₦0</span>
+                            <span class="ml-2 text-sm text-gray-500">Inclusive of all taxes</span>
+                        </div>
+
+                        <!-- Book Information -->
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <span class="text-sm text-gray-600">ISBN:</span>
+                                <span class="ml-2 font-medium" id="bookIsbn">Loading...</span>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-600">Format:</span>
+                                <span class="ml-2 font-medium" id="bookFormat">Loading...</span>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-600">Pages:</span>
+                                <span class="ml-2 font-medium" id="bookPages">0</span>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-600">Publisher:</span>
+                                <span class="ml-2 font-medium" id="bookPublisher">Loading...</span>
+                            </div>
+                        </div>
+
+                        <!-- Course Information -->
+                        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                            <h3 class="font-semibold text-blue-900 mb-2">Course Information</h3>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <span class="text-blue-700">Department:</span>
+                                    <span class="ml-2" id="bookDepartment">Loading...</span>
+                                </div>
+                                <div>
+                                    <span class="text-blue-700">Course Code:</span>
+                                    <span class="ml-2" id="bookCourse">Loading...</span>
+                                </div>
+                                <div>
+                                    <span class="text-blue-700">Level:</span>
+                                    <span class="ml-2" id="bookLevel">Loading...</span>
+                                </div>
+                                <div>
+                                    <span class="text-blue-700">Semester:</span>
+                                    <span class="ml-2" id="bookSemester">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stock & Delivery -->
+                        <div class="mb-6 p-4 bg-green-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-semibold text-green-900" id="stockStatus">Checking stock...</span>
+                                    <p class="text-sm text-green-700" id="stockCount">Loading...</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-green-700">
+                                        <i class="fas fa-shipping-fast mr-1"></i>
+                                        Delivery in 24-48 hours on campus
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart -->
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="flex items-center border border-gray-300 rounded-lg">
+                                <button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100" onclick="updateQuantity(-1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span id="quantity" class="w-12 text-center font-semibold">1</span>
+                                <button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100" onclick="updateQuantity(1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <button 
+                                onclick="addToCartFromDetails()"
+                                class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center"
+                                id="addToCartBtn"
+                            >
+                                <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                            </button>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="flex space-x-4">
+                            <button class="flex items-center text-gray-600 hover:text-primary">
+                                <i class="far fa-heart mr-2"></i> Add to Wishlist
+                            </button>
+                            <button class="flex items-center text-gray-600 hover:text-primary">
+                                <i class="fas fa-share-alt mr-2"></i> Share
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Description & Details Tabs -->
+                    <div class="bg-white rounded-lg shadow-sm border mt-6">
+                        <!-- Tabs -->
+                        <div class="border-b">
+                            <nav class="flex">
+                                <button class="px-6 py-3 border-b-2 border-primary text-primary font-medium" onclick="switchTab('description')">
+                                    Description
+                                </button>
+                                <button class="px-6 py-3 text-gray-600 hover:text-primary font-medium" onclick="switchTab('specifications')">
+                                    Specifications
+                                </button>
+                                <button class="px-6 py-3 text-gray-600 hover:text-primary font-medium" onclick="switchTab('reviews')">
+                                    Reviews (<span id="reviewsCount">0</span>)
+                                </button>
+                            </nav>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="p-6">
+                            <!-- Description Tab -->
+                            <div id="descriptionTab">
+                                <h3 class="font-semibold text-gray-900 mb-4">Book Description</h3>
+                                <p class="text-gray-600 mb-4" id="bookDescription">
+                                    Loading description...
+                                </p>
+                                <h4 class="font-semibold text-gray-900 mb-2">Key Features:</h4>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1" id="keyFeatures">
+                                    <!-- Key features will be loaded dynamically -->
+                                </ul>
+                            </div>
+
+                            <!-- Specifications Tab -->
+                            <div id="specificationsTab" class="hidden">
+                                <h3 class="font-semibold text-gray-900 mb-4">Book Specifications</h3>
+                                <div class="grid grid-cols-2 gap-4" id="specificationsList">
+                                    <!-- Specifications will be loaded dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Reviews Tab -->
+                            <div id="reviewsTab" class="hidden">
+                                <h3 class="font-semibold text-gray-900 mb-4">Customer Reviews</h3>
+                                
+                                <!-- Review Summary -->
+                                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-center">
+                                            <div class="text-3xl font-bold text-gray-900" id="averageRating">0.0</div>
+                                            <div class="flex items-center justify-center" id="reviewStars">
+                                                <!-- Review stars will be loaded dynamically -->
+                                            </div>
+                                            <div class="text-sm text-gray-600" id="totalReviews">0 reviews</div>
+                                        </div>
+                                        <div class="flex-1 ml-6" id="ratingDistribution">
+                                            <!-- Rating distribution will be loaded dynamically -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Review List -->
+                                <div class="space-y-6" id="reviewsList">
+                                    <!-- Reviews will be loaded dynamically -->
+                                </div>
+
+                                <!-- Add Review Button -->
+                                <button class="w-full border-2 border-dashed border-gray-300 text-gray-600 py-4 rounded-lg hover:border-primary hover:text-primary transition-colors mt-6">
+                                    <i class="fas fa-plus mr-2"></i> Write a Review
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Books -->
+                    <div class="mt-8">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Related Books</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="relatedBooks">
+                            <!-- Related books will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample book database (same as in books.html)
+        const bookDatabase = {
+            1: {
+                id: 1,
+                title: "Introduction to Computer Science",
+                author: "Dr. John Smith",
+                price: 4500,
+                rating: 4.5,
+                reviews: 24,
+                department: "Computer Science",
+                course: "CSC 101",
+                level: "100 Level",
+                semester: "First",
+                isbn: "978-0123456789",
+                format: "Physical Copy",
+                pages: 320,
+                publisher: "UNIPORT Press",
+                stock: 15,
+                description: "This comprehensive textbook provides a thorough introduction to the fundamental concepts of computer science. Written specifically for University of Port Harcourt students, it covers programming basics, algorithms, data structures, and computational thinking.",
+                keyFeatures: [
+                    "Tailored for UNIPORT Computer Science curriculum",
+                    "Practical examples and exercises",
+                    "Step-by-step programming tutorials",
+                    "Exam preparation questions",
+                    "Online resources and code examples"
+                ],
+                specifications: {
+                    publicationDate: "January 2024",
+                    edition: "3rd Edition",
+                    language: "English",
+                    binding: "Paperback",
+                    dimensions: "23.4 x 15.6 x 2.1 cm",
+                    weight: "0.45 kg"
+                },
+                reviewsList: [
+                    {
+                        name: "Chinedu Okoro",
+                        rating: 5,
+                        date: "2 weeks ago",
+                        comment: "Excellent book! Very helpful for my CSC 101 course. The examples are clear and the explanations are easy to understand."
+                    },
+                    {
+                        name: "Amina Yusuf",
+                        rating: 4,
+                        date: "1 month ago",
+                        comment: "Good textbook but some chapters could use more practical examples. Overall, it's been very useful for my studies."
+                    }
+                ],
+                relatedBooks: [4, 2] // IDs of related books
+            },
+            2: {
+                id: 2,
+                title: "Advanced Mathematics",
+                author: "Prof. Jane Doe",
+                price: 5200,
+                rating: 4.2,
+                reviews: 18,
+                department: "Mathematics",
+                course: "MAT 201",
+                level: "200 Level",
+                semester: "Second",
+                isbn: "978-0123456790",
+                format: "Physical Copy",
+                pages: 280,
+                publisher: "UNIPORT Press",
+                stock: 8,
+                description: "Advanced mathematical concepts tailored for engineering and science students. Includes calculus, linear algebra, and differential equations with practical applications.",
+                keyFeatures: [
+                    "Comprehensive coverage of advanced topics",
+                    "Real-world application examples",
+                    "Step-by-step problem solutions",
+                    "Practice exercises with answers",
+                    "UNIPORT curriculum aligned"
+                ],
+                specifications: {
+                    publicationDate: "March 2024",
+                    edition: "2nd Edition",
+                    language: "English",
+                    binding: "Hardcover",
+                    dimensions: "25.0 x 17.5 x 2.5 cm",
+                    weight: "0.65 kg"
+                },
+                reviewsList: [
+                    {
+                        name: "Michael Johnson",
+                        rating: 5,
+                        date: "3 weeks ago",
+                        comment: "Perfect for engineering students. The examples are very practical and relevant."
+                    }
+                ],
+                relatedBooks: [5, 1]
+            },
+            3: {
+                id: 3,
+                title: "Principles of Economics",
+                author: "Dr. James Wilson",
+                price: 3800,
+                rating: 4.7,
+                reviews: 32,
+                department: "Economics",
+                course: "ECO 101",
+                level: "100 Level",
+                semester: "First",
+                isbn: "978-0123456791",
+                format: "Digital",
+                pages: 350,
+                publisher: "UNIPORT Press",
+                stock: 25,
+                description: "Comprehensive introduction to economic principles with Nigerian case studies. Perfect for first-year economics students.",
+                keyFeatures: [
+                    "Nigerian economic case studies",
+                    "Beginner-friendly explanations",
+                    "Current economic data",
+                    "Practice questions and exercises",
+                    "Digital format with search functionality"
+                ],
+                specifications: {
+                    publicationDate: "February 2024",
+                    edition: "4th Edition",
+                    language: "English",
+                    format: "PDF",
+                    fileSize: "8.5 MB"
+                },
+                reviewsList: [
+                    {
+                        name: "Sarah Thompson",
+                        rating: 5,
+                        date: "1 week ago",
+                        comment: "The Nigerian case studies make this book incredibly relevant. Highly recommended!"
+                    }
+                ],
+                relatedBooks: [6, 1]
+            },
+            4: {
+                id: 4,
+                title: "Data Structures and Algorithms",
+                author: "Dr. Sarah Johnson",
+                price: 6200,
+                rating: 4.8,
+                reviews: 15,
+                department: "Computer Science",
+                course: "CSC 201",
+                level: "200 Level",
+                semester: "Second",
+                isbn: "978-0123456792",
+                format: "Physical Copy",
+                pages: 420,
+                publisher: "UNIPORT Press",
+                stock: 12,
+                description: "In-depth coverage of data structures and algorithms with Python implementations. Essential for computer science majors.",
+                keyFeatures: [
+                    "Python code examples",
+                    "Algorithm complexity analysis",
+                    "Practical implementation guides",
+                    "Interview preparation questions",
+                    "Comprehensive exercise sets"
+                ],
+                specifications: {
+                    publicationDate: "December 2023",
+                    edition: "1st Edition",
+                    language: "English",
+                    binding: "Paperback",
+                    dimensions: "23.4 x 15.6 x 2.8 cm",
+                    weight: "0.55 kg"
+                },
+                reviewsList: [],
+                relatedBooks: [1, 2]
+            },
+            5: {
+                id: 5,
+                title: "Calculus Made Easy",
+                author: "Prof. Michael Brown",
+                price: 4100,
+                rating: 4.3,
+                reviews: 22,
+                department: "Mathematics",
+                course: "MAT 101",
+                level: "100 Level",
+                semester: "First",
+                isbn: "978-0123456793",
+                format: "Physical Copy",
+                pages: 300,
+                publisher: "UNIPORT Press",
+                stock: 20,
+                description: "Step-by-step guide to calculus concepts with numerous examples and practice problems.",
+                keyFeatures: [
+                    "Beginner-friendly approach",
+                    "Step-by-step examples",
+                    "Practice problems with solutions",
+                    "Visual explanations",
+                    "Exam-focused content"
+                ],
+                specifications: {
+                    publicationDate: "November 2023",
+                    edition: "2nd Edition",
+                    language: "English",
+                    binding: "Paperback",
+                    dimensions: "23.4 x 15.6 x 2.0 cm",
+                    weight: "0.48 kg"
+                },
+                reviewsList: [
+                    {
+                        name: "David Wilson",
+                        rating: 4,
+                        date: "2 months ago",
+                        comment: "Made calculus much easier to understand. The step-by-step examples are very helpful."
+                    }
+                ],
+                relatedBooks: [2, 1]
+            },
+            6: {
+                id: 6,
+                title: "Microeconomic Theory",
+                author: "Dr. Emily Davis",
+                price: 4800,
+                rating: 4.6,
+                reviews: 19,
+                department: "Economics",
+                course: "ECO 201",
+                level: "200 Level",
+                semester: "Second",
+                isbn: "978-0123456794",
+                format: "Digital",
+                pages: 380,
+                publisher: "UNIPORT Press",
+                stock: 18,
+                description: "Advanced microeconomic theory with applications to Nigerian market structures.",
+                keyFeatures: [
+                    "Advanced theoretical concepts",
+                    "Nigerian market applications",
+                    "Mathematical appendix",
+                    "Case studies and examples",
+                    "Digital format with interactive graphs"
+                ],
+                specifications: {
+                    publicationDate: "January 2024",
+                    edition: "3rd Edition",
+                    language: "English",
+                    format: "PDF",
+                    fileSize: "9.2 MB"
+                },
+                reviewsList: [
+                    {
+                        name: "Grace Okon",
+                        rating: 5,
+                        date: "3 weeks ago",
+                        comment: "The Nigerian market applications make this book stand out. Very relevant content!"
+                    }
+                ],
+                relatedBooks: [3, 1]
+            }
+        };
+
+        let currentQuantity = 1;
+        let currentBook = null;
+
+        function updateQuantity(change) {
+            currentQuantity = Math.max(1, currentQuantity + change);
+            document.getElementById('quantity').textContent = currentQuantity;
+        }
+
+        function addToCartFromDetails() {
+            if (!currentBook) return;
+            
+            const bookTitle = currentBook.title;
+            const bookPrice = currentBook.price;
+            
+            for (let i = 0; i < currentQuantity; i++) {
+                addToCart(currentBook.id, bookTitle, bookPrice);
+            }
+            
+            alert(`${currentQuantity} copy(s) of "${bookTitle}" added to cart!`);
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.getElementById('descriptionTab').classList.add('hidden');
+            document.getElementById('specificationsTab').classList.add('hidden');
+            document.getElementById('reviewsTab').classList.add('hidden');
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            // Update tab buttons
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => {
+                btn.classList.remove('border-b-2', 'border-primary', 'text-primary');
+                btn.classList.add('text-gray-600');
+            });
+            
+            event.target.classList.add('border-b-2', 'border-primary', 'text-primary');
+            event.target.classList.remove('text-gray-600');
+        }
+
+        function generateStars(rating, size = 'text-sm') {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            
+            let starsHTML = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += `<i class="fas fa-star text-yellow-400 ${size}"></i>`;
+            }
+            if (hasHalfStar) {
+                starsHTML += `<i class="fas fa-star-half-alt text-yellow-400 ${size}"></i>`;
+            }
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += `<i class="far fa-star text-yellow-400 ${size}"></i>`;
+            }
+            
+            return starsHTML;
+        }
+
+        function loadBookDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = parseInt(urlParams.get('id'));
+            currentBook = bookDatabase[bookId];
+            
+            if (!currentBook) {
+                showError();
+                return;
+            }
+            
+            // Update page title
+            document.title = `UNIPORT Bookstore - ${currentBook.title}`;
+            
+            // Update breadcrumb
+            document.getElementById('breadcrumbTitle').textContent = currentBook.title;
+            
+            // Update basic book information
+            document.getElementById('bookTitle').textContent = currentBook.title;
+            document.getElementById('bookAuthor').textContent = `by ${currentBook.author}`;
+            document.getElementById('bookPrice').textContent = `₦${currentBook.price.toLocaleString()}`;
+            document.getElementById('bookIsbn').textContent = currentBook.isbn;
+            document.getElementById('bookFormat').textContent = currentBook.format;
+            document.getElementById('bookPages').textContent = currentBook.pages;
+            document.getElementById('bookPublisher').textContent = currentBook.publisher;
+            
+            // Update course information
+            document.getElementById('bookDepartment').textContent = currentBook.department;
+            document.getElementById('bookCourse').textContent = currentBook.course;
+            document.getElementById('bookLevel').textContent = currentBook.level;
+            document.getElementById('bookSemester').textContent = currentBook.semester;
+            
+            // Update stock information
+            const stockStatus = currentBook.stock > 0 ? 'In Stock' : 'Out of Stock';
+            const stockClass = currentBook.stock > 0 ? 'text-green-900' : 'text-red-900';
+            const stockBg = currentBook.stock > 0 ? 'bg-green-50' : 'bg-red-50';
+            
+            document.getElementById('stockStatus').textContent = stockStatus;
+            document.getElementById('stockStatus').className = `font-semibold ${stockClass}`;
+            document.getElementById('stockCount').textContent = `${currentBook.stock} copies available`;
+            document.querySelector('.bg-green-50').className = `p-4 ${stockBg} rounded-lg`;
+            
+            // Update Add to Cart button
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (currentBook.stock === 0) {
+                addToCartBtn.disabled = true;
+                addToCartBtn.innerHTML = '<i class="fas fa-times mr-2"></i> Out of Stock';
+                addToCartBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            
+            // Update stars and rating
+            document.getElementById('starRating').innerHTML = generateStars(currentBook.rating);
+            document.getElementById('bookRating').textContent = `${currentBook.rating} (${currentBook.reviews} reviews)`;
+            
+            // Update description tab
+            document.getElementById('bookDescription').textContent = currentBook.description;
+            document.getElementById('keyFeatures').innerHTML = currentBook.keyFeatures
+                .map(feature => `<li>${feature}</li>`)
+                .join('');
+            
+            // Update specifications tab
+            document.getElementById('specificationsList').innerHTML = `
+                <div><strong>ISBN:</strong> ${currentBook.isbn}</div>
+                <div><strong>Publication Date:</strong> ${currentBook.specifications.publicationDate}</div>
+                <div><strong>Edition:</strong> ${currentBook.specifications.edition}</div>
+                <div><strong>Language:</strong> ${currentBook.specifications.language}</div>
+                ${currentBook.format === 'Physical Copy' ? `
+                    <div><strong>Binding:</strong> ${currentBook.specifications.binding}</div>
+                    <div><strong>Dimensions:</strong> ${currentBook.specifications.dimensions}</div>
+                    <div><strong>Weight:</strong> ${currentBook.specifications.weight}</div>
+                ` : `
+                    <div><strong>Format:</strong> ${currentBook.specifications.format}</div>
+                    <div><strong>File Size:</strong> ${currentBook.specifications.fileSize}</div>
+                `}
+                <div><strong>Publisher:</strong> ${currentBook.publisher}</div>
+            `;
+            
+            // Update reviews tab
+            document.getElementById('reviewsCount').textContent = currentBook.reviews;
+            document.getElementById('averageRating').textContent = currentBook.rating;
+            document.getElementById('reviewStars').innerHTML = generateStars(currentBook.rating, 'text-lg');
+            document.getElementById('totalReviews').textContent = `${currentBook.reviews} reviews`;
+            
+            // Update reviews list
+            const reviewsList = document.getElementById('reviewsList');
+            if (currentBook.reviewsList.length > 0) {
+                reviewsList.innerHTML = currentBook.reviewsList.map(review => `
+                    <div class="border-b pb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-semibold">${review.name}</div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <div class="flex items-center mr-2">
+                                    ${generateStars(review.rating)}
+                                </div>
+                                <span>${review.date}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">${review.comment}</p>
+                    </div>
+                `).join('');
+            } else {
+                reviewsList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-comment text-gray-400 text-4xl mb-4"></i>
+                        <p class="text-gray-600">No reviews yet. Be the first to review this book!</p>
+                    </div>
+                `;
+            }
+            
+            // Update related books
+            const relatedBooksContainer = document.getElementById('relatedBooks');
+            const relatedBooks = currentBook.relatedBooks.map(id => bookDatabase[id]).filter(book => book);
+            
+            if (relatedBooks.length > 0) {
+                relatedBooksContainer.innerHTML = relatedBooks.map(book => `
+                    <div class="bg-white rounded-lg shadow-sm border p-4 flex items-center space-x-3 cursor-pointer hover:shadow-md transition-shadow" onclick="viewBookDetails(${book.id})">
+                        <div class="bg-gray-200 w-16 h-20 rounded flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-book text-gray-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">${book.title}</h4>
+                            <p class="text-sm text-gray-600">${book.author}</p>
+                            <p class="text-primary font-semibold">₦${book.price.toLocaleString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                relatedBooksContainer.innerHTML = '<p class="text-gray-500">No related books found.</p>';
+            }
+            
+            // Show content
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('bookContent').classList.remove('hidden');
+        }
+
+        function viewBookDetails(bookId) {
+            window.location.href = `book-details.html?id=${bookId}`;
+        }
+
+        function showError() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+        }
+
+        // Initialize book details on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            loadBookDetails();
+        });
+    </script>
+</body>
+</html>
