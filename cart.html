@@ -4,43 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNIPORT Bookstore - Shopping Cart</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0000ff',
-                        secondary: '#F2A900',
+                        primary: '#0000ff', // UNIPORT Blue
+                        secondary: '#F2A900', // UNIPORT Gold
+                    },
+                    transitionProperty: {
+                        'height': 'height',
+                        'spacing': 'margin, padding',
                     }
                 }
             }
         }
     </script>
+    
+    <style>
+        /* Custom CSS for transitions and animations */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-header.scrolled {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item.removing {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+        
+        .quantity-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .quantity-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .pulse-animation {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .slide-in-right {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .slide-in-right.show {
+            transform: translateX(0);
+        }
+        
+        .empty-cart-icon {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation Header -->
-    <header class="bg-white shadow-sm border-b">
+    <header class="bg-white shadow-sm border-b sticky-header transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
                     <div class="text-white p-2 rounded-lg">
-                                                <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
+                        <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
-                    <span class="ml-2 text-xl font-bold text-gray-900">
+                    <span class="ml-2 text-xl font-bold text-gray-900 transition-colors duration-300">
                         UNIPORT Bookstore
                     </span>
                 </div>
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
-                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
-                    <a href="cart.html" class="text-primary font-medium border-b-2 border-primary relative">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Home</a>
+                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Books</a>
+                    <a href="cart.html" class="text-primary font-medium border-b-2 border-primary relative transition-colors duration-300">
                         <i class="fas fa-shopping-cart"></i> Cart
-                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
                     </a>
                     <div class="relative group" id="authSection">
                         <!-- This will be populated by JavaScript -->
@@ -48,31 +152,46 @@
                 </nav>
 
                 <!-- Mobile menu button -->
-                <button class="md:hidden p-2 text-gray-600">
-                    <i class="fas fa-bars"></i>
+                <button id="mobileMenuButton" class="md:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-300">
+                    <i class="fas fa-bars text-xl"></i>
                 </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t">
+                <div class="py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Home</a>
+                    <a href="books.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Books</a>
+                    <a href="cart.html" class="block text-primary font-medium py-2 transition-colors duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Cart
+                        <span id="mobileCartCount" class="absolute -top-1 left-20 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
+                    </a>
+                    <div id="mobileAuthSection" class="pt-2 border-t">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Shopping Cart</h1>
-            <p class="text-gray-600">Review your items and proceed to checkout</p>
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 transition-all duration-500">Shopping Cart</h1>
+            <p class="text-gray-600 transition-all duration-500 delay-100">Review your items and proceed to checkout</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Cart Items -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-sm border">
+                <div class="bg-white rounded-lg shadow-sm border hover-lift transition-all duration-300">
                     <!-- Cart Header -->
                     <div class="border-b p-6">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-semibold text-gray-900">
                                 Cart Items (<span id="itemCount">0</span>)
                             </h2>
-                            <button onclick="clearCart()" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                            <button onclick="clearCart()" class="text-red-600 hover:text-red-800 text-sm font-medium transition-colors duration-300">
                                 <i class="fas fa-trash mr-1"></i> Clear Cart
                             </button>
                         </div>
@@ -81,11 +200,11 @@
                     <!-- Cart Items List -->
                     <div id="cartItems" class="p-6">
                         <!-- Cart items will be dynamically loaded here -->
-                        <div id="emptyCart" class="text-center py-12">
-                            <i class="fas fa-shopping-cart text-gray-400 text-6xl mb-4"></i>
+                        <div id="emptyCart" class="text-center py-12 fade-in">
+                            <i class="fas fa-shopping-cart text-gray-400 text-6xl mb-4 empty-cart-icon"></i>
                             <h3 class="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
                             <p class="text-gray-600 mb-6">Add some books to get started</p>
-                            <a href="books.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors inline-flex items-center">
+                            <a href="books.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300 inline-flex items-center hover-lift">
                                 <i class="fas fa-book mr-2"></i> Browse Books
                             </a>
                         </div>
@@ -93,29 +212,67 @@
                 </div>
 
                 <!-- Promo Code Section -->
-                <div class="bg-white rounded-lg shadow-sm border p-6 mt-6">
+                <div class="bg-white rounded-lg shadow-sm border p-6 mt-6 hover-lift transition-all duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Apply Promo Code</h3>
                     <div class="flex space-x-4">
                         <input 
                             type="text" 
                             id="promoCode"
                             placeholder="Enter promo code"
-                            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent"
+                            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
                         >
                         <button 
                             onclick="applyPromoCode()"
-                            class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                            class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-300 hover-lift"
                         >
                             Apply
                         </button>
                     </div>
-                    <div id="promoMessage" class="mt-2 text-sm"></div>
+                    <div id="promoMessage" class="mt-2 text-sm transition-all duration-300"></div>
+                </div>
+
+                <!-- Recommended Books Section -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 mt-6 hover-lift transition-all duration-300 fade-in">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">You Might Also Like</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Recommended Book 1 -->
+                        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-300 cursor-pointer" onclick="viewBookDetails(7)">
+                            <div class="flex-shrink-0">
+                                <div class="bg-gray-200 w-12 h-16 rounded flex items-center justify-center">
+                                    <i class="fas fa-book text-gray-400"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">Organic Chemistry</h4>
+                                <p class="text-primary font-semibold">₦6,500</p>
+                            </div>
+                            <button onclick="event.stopPropagation(); addToCart(7, 'Organic Chemistry', 6500)" class="bg-primary text-white p-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Recommended Book 2 -->
+                        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-300 cursor-pointer" onclick="viewBookDetails(8)">
+                            <div class="flex-shrink-0">
+                                <div class="bg-gray-200 w-12 h-16 rounded flex items-center justify-center">
+                                    <i class="fas fa-book text-gray-400"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">Statistical Methods</h4>
+                                <p class="text-primary font-semibold">₦5,500</p>
+                            </div>
+                            <button onclick="event.stopPropagation(); addToCart(8, 'Statistical Methods', 5500)" class="bg-primary text-white p-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Order Summary -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
+                <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-8 hover-lift transition-all duration-300 fade-in">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
                     
                     <div class="space-y-3 mb-6">
@@ -147,19 +304,19 @@
                     <button 
                         id="checkoutBtn"
                         onclick="proceedToCheckout()"
-                        class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+                        class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center hover-lift"
                         disabled
                     >
                         <i class="fas fa-lock mr-2"></i> Proceed to Checkout
                     </button>
 
                     <!-- Continue Shopping -->
-                    <a href="books.html" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-block text-center mt-3">
+                    <a href="books.html" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-300 inline-block text-center mt-3 hover-lift">
                         Continue Shopping
                     </a>
 
                     <!-- Security Badge -->
-                    <div class="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg text-center transition-all duration-300">
                         <div class="flex justify-center items-center space-x-2 text-sm text-gray-600 mb-2">
                             <i class="fas fa-shield-alt text-primary"></i>
                             <span>Secure Checkout</span>
@@ -169,15 +326,15 @@
 
                     <!-- Trust Indicators -->
                     <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-                        <div class="text-xs text-gray-500">
+                        <div class="text-xs text-gray-500 transition-colors duration-300 hover:text-primary">
                             <i class="fas fa-shipping-fast block text-lg mb-1"></i>
                             Fast Delivery
                         </div>
-                        <div class="text-xs text-gray-500">
+                        <div class="text-xs text-gray-500 transition-colors duration-300 hover:text-primary">
                             <i class="fas fa-undo-alt block text-lg mb-1"></i>
                             Easy Returns
                         </div>
-                        <div class="text-xs text-gray-500">
+                        <div class="text-xs text-gray-500 transition-colors duration-300 hover:text-primary">
                             <i class="fas fa-headset block text-lg mb-1"></i>
                             24/7 Support
                         </div>
@@ -189,13 +346,147 @@
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12 mt-12">
-        <!-- Same footer as index.html -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="fade-in">
+                    <h3 class="text-lg font-semibold mb-4">UNIPORT Bookstore</h3>
+                    <p class="text-gray-400">
+                        Your trusted source for academic materials and textbooks at University of Port Harcourt.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="fade-in">
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="books.html" class="hover:text-white transition-colors duration-300">Books</a></li>
+                        <li><a href="cart.html" class="hover:text-white transition-colors duration-300">Shopping Cart</a></li>
+                    </ul>
+                </div>
+                
+                <div class="fade-in">
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Shipping Info</a></li>
+                    </ul>
+                </div>
+                
+                <div class="fade-in">
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <div class="text-gray-400 space-y-2">
+                        <p><i class="fas fa-university mr-2"></i>University of Port Harcourt</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Choba, Rivers State</p>
+                        <p><i class="fas fa-envelope mr-2"></i>bookstore@uniport.edu.ng</p>
+                        <p><i class="fas fa-phone mr-2"></i>+234 (0) 123 456 7890</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 fade-in">
+                <p>&copy; 2025 UNIPORT Bookstore. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/main.js"></script>
     <script>
         let appliedDiscount = 0;
         let currentPromoCode = '';
+
+        // Update navigation based on login status
+        function updateNavigation() {
+            const authSection = document.getElementById('authSection');
+            const mobileAuthSection = document.getElementById('mobileAuthSection');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (currentUser) {
+                // User is logged in - show profile icon
+                authSection.innerHTML = `
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors duration-300">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="hidden md:block font-medium">${currentUser.name || 'Profile'}</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-user-circle mr-2"></i>My Profile
+                            </a>
+                            <a href="orders.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                            </a>
+                            <div class="border-t my-1"></div>
+                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                mobileAuthSection.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">${currentUser.name || 'User'}</p>
+                                <p class="text-sm text-gray-600">${currentUser.email || ''}</p>
+                            </div>
+                        </div>
+                        <a href="profile.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-user-circle mr-2"></i>My Profile
+                        </a>
+                        <a href="orders.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <button onclick="logout()" class="w-full text-left text-red-600 hover:text-red-800 font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                `;
+            } else {
+                // User is not logged in - show login/register links
+                authSection.innerHTML = `
+                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Login</a>
+                    <span class="text-gray-400 mx-2">|</span>
+                    <a href="register.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Register</a>
+                `;
+                
+                mobileAuthSection.innerHTML = `
+                    <a href="login.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Login</a>
+                    <a href="register.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Register</a>
+                `;
+            }
+        }
+
+        // Logout function
+        window.logout = function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                updateNavigation();
+                showToast('You have been logged out successfully', 'success');
+                
+                // Redirect to home page after logout
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        }
 
         function renderCart() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -206,7 +497,7 @@
 
             if (cart.length === 0) {
                 emptyCart.classList.remove('hidden');
-                cartItems.innerHTML = '<div id="emptyCart" class="text-center py-12">' + emptyCart.innerHTML + '</div>';
+                cartItems.innerHTML = '<div id="emptyCart" class="text-center py-12 fade-in">' + emptyCart.innerHTML + '</div>';
                 itemCount.textContent = '0';
                 checkoutBtn.disabled = true;
                 checkoutBtn.innerHTML = '<i class="fas fa-lock mr-2"></i> Proceed to Checkout';
@@ -216,6 +507,14 @@
                 document.getElementById('promoCode').value = '';
                 document.getElementById('promoMessage').textContent = '';
                 document.getElementById('discountRow').classList.add('hidden');
+                
+                // Trigger fade-in animation for empty cart
+                setTimeout(() => {
+                    const emptyCartElement = document.getElementById('emptyCart');
+                    if (emptyCartElement) {
+                        emptyCartElement.classList.add('visible');
+                    }
+                }, 100);
                 return;
             }
 
@@ -224,17 +523,17 @@
             itemCount.textContent = totalItems;
 
             cartItems.innerHTML = cart.map(item => `
-                <div class="flex items-center space-x-4 py-4 border-b last:border-b-0">
+                <div class="cart-item flex items-center space-x-4 py-4 border-b last:border-b-0 transition-all duration-300">
                     <!-- Book Image -->
                     <div class="flex-shrink-0">
-                        <div class="bg-gray-200 w-16 h-20 rounded-lg flex items-center justify-center cursor-pointer" onclick="viewBookDetails(${item.id})">
+                        <div class="bg-gray-200 w-16 h-20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors duration-300" onclick="viewBookDetails(${item.id})">
                             <i class="fas fa-book text-gray-400 text-2xl"></i>
                         </div>
                     </div>
 
                     <!-- Book Details -->
                     <div class="flex-1 cursor-pointer" onclick="viewBookDetails(${item.id})">
-                        <h4 class="font-semibold text-gray-900 hover:text-primary transition-colors">${item.title}</h4>
+                        <h4 class="font-semibold text-gray-900 hover:text-primary transition-colors duration-300">${item.title}</h4>
                         <p class="text-gray-600 text-sm">₦${item.price.toLocaleString()} each</p>
                     </div>
 
@@ -242,7 +541,7 @@
                     <div class="flex items-center space-x-2">
                         <button 
                             onclick="updateQuantity(${item.id}, -1)"
-                            class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                            class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-300"
                             title="Decrease quantity"
                         >
                             <i class="fas fa-minus text-gray-600 text-xs"></i>
@@ -250,7 +549,7 @@
                         <span class="w-8 text-center font-semibold">${item.quantity}</span>
                         <button 
                             onclick="updateQuantity(${item.id}, 1)"
-                            class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                            class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-300"
                             title="Increase quantity"
                         >
                             <i class="fas fa-plus text-gray-600 text-xs"></i>
@@ -262,7 +561,7 @@
                         <div class="font-semibold text-gray-900">₦${(item.price * item.quantity).toLocaleString()}</div>
                         <button 
                             onclick="removeFromCart(${item.id})"
-                            class="text-red-600 hover:text-red-800 text-sm mt-1 transition-colors"
+                            class="text-red-600 hover:text-red-800 text-sm mt-1 transition-colors duration-300"
                             title="Remove from cart"
                         >
                             <i class="fas fa-trash mr-1"></i> Remove
@@ -277,6 +576,14 @@
             
             // Update checkout button text with item count
             checkoutBtn.innerHTML = `<i class="fas fa-lock mr-2"></i> Checkout (${totalItems} items)`;
+            
+            // Trigger fade-in animation for cart items
+            setTimeout(() => {
+                const cartItemElements = document.querySelectorAll('.cart-item');
+                cartItemElements.forEach(item => {
+                    item.classList.add('visible');
+                });
+            }, 100);
         }
 
         function updateQuantity(bookId, change) {
@@ -288,16 +595,35 @@
                 cart[itemIndex].quantity += change;
                 
                 if (cart[itemIndex].quantity <= 0) {
-                    cart.splice(itemIndex, 1);
-                    showToast('Item removed from cart', 'info');
+                    // Animate removal
+                    const cartItem = document.querySelector(`.cart-item:nth-child(${itemIndex + 1})`);
+                    if (cartItem) {
+                        cartItem.classList.add('removing');
+                        setTimeout(() => {
+                            cart.splice(itemIndex, 1);
+                            localStorage.setItem('cart', JSON.stringify(cart));
+                            renderCart();
+                            updateCartCount();
+                            showToast('Item removed from cart', 'info');
+                        }, 300);
+                    }
                 } else {
                     const action = change > 0 ? 'increased' : 'decreased';
                     showToast(`Quantity ${action} to ${cart[itemIndex].quantity}`, 'success');
+                    
+                    // Add pulse animation to the quantity display
+                    const quantityDisplay = document.querySelector(`.cart-item:nth-child(${itemIndex + 1}) .quantity-btn + span`);
+                    if (quantityDisplay) {
+                        quantityDisplay.classList.add('pulse-animation');
+                        setTimeout(() => {
+                            quantityDisplay.classList.remove('pulse-animation');
+                        }, 500);
+                    }
+                    
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCart();
+                    updateCartCount();
                 }
-                
-                localStorage.setItem('cart', JSON.stringify(cart));
-                renderCart();
-                updateCartCount();
             }
         }
 
@@ -307,11 +633,19 @@
             
             if (itemIndex !== -1) {
                 const itemName = cart[itemIndex].title;
-                cart.splice(itemIndex, 1);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                renderCart();
-                updateCartCount();
-                showToast(`"${itemName}" removed from cart`, 'info');
+                
+                // Animate removal
+                const cartItem = document.querySelector(`.cart-item:nth-child(${itemIndex + 1})`);
+                if (cartItem) {
+                    cartItem.classList.add('removing');
+                    setTimeout(() => {
+                        cart.splice(itemIndex, 1);
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        renderCart();
+                        updateCartCount();
+                        showToast(`"${itemName}" removed from cart`, 'info');
+                    }, 300);
+                }
             }
         }
 
@@ -320,10 +654,18 @@
             if (cart.length === 0) return;
             
             if (confirm('Are you sure you want to clear your cart?')) {
-                localStorage.removeItem('cart');
-                renderCart();
-                updateCartCount();
-                showToast('Cart cleared', 'info');
+                // Animate all items out
+                const cartItems = document.querySelectorAll('.cart-item');
+                cartItems.forEach(item => {
+                    item.classList.add('removing');
+                });
+                
+                setTimeout(() => {
+                    localStorage.removeItem('cart');
+                    renderCart();
+                    updateCartCount();
+                    showToast('Cart cleared', 'info');
+                }, 300);
             }
         }
 
@@ -376,6 +718,13 @@
                 
                 updateOrderSummary(subtotal);
                 showToast('Promo code applied successfully!', 'success');
+                
+                // Add animation to discount row
+                const discountRow = document.getElementById('discountRow');
+                discountRow.classList.add('pulse-animation');
+                setTimeout(() => {
+                    discountRow.classList.remove('pulse-animation');
+                }, 500);
             } else {
                 appliedDiscount = 0;
                 currentPromoCode = '';
@@ -429,6 +778,45 @@
             window.location.href = `book-details.html?id=${bookId}`;
         }
 
+        function addToCart(bookId, title, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === bookId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: bookId,
+                    title: title,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+            updateCartCount();
+            showToast(`"${title}" added to cart`, 'success');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            const cartCount = document.getElementById('cartCount');
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                mobileCartCount.textContent = totalItems;
+                cartCount.style.display = 'flex';
+                mobileCartCount.style.display = 'flex';
+            } else {
+                cartCount.style.display = 'none';
+                mobileCartCount.style.display = 'none';
+            }
+        }
+
         function showToast(message, type = 'info') {
             // Remove existing toasts
             const existingToast = document.querySelector('.toast-message');
@@ -444,7 +832,7 @@
             }[type] || 'bg-gray-500';
 
             const toastHTML = `
-                <div class="toast-message fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300">
+                <div class="toast-message fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 slide-in-right">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
                         <span>${message}</span>
@@ -454,18 +842,83 @@
 
             document.body.insertAdjacentHTML('beforeend', toastHTML);
 
+            // Show the toast
+            setTimeout(() => {
+                const toast = document.querySelector('.toast-message');
+                if (toast) {
+                    toast.classList.add('show');
+                }
+            }, 10);
+
             // Auto remove after 3 seconds
             setTimeout(() => {
                 const toast = document.querySelector('.toast-message');
                 if (toast) {
-                    toast.remove();
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
                 }
             }, 3000);
         }
 
-        // Initialize cart on page load
+        // Mobile menu functionality
         document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+                
+                // Change icon based on menu state
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Fade in elements on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Check on load
+            fadeInOnScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // Sticky header effect
+            const header = document.querySelector('.sticky-header');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Update navigation and cart count
             updateNavigation();
+            updateCartCount();
+
+            // Initialize cart on page load
             renderCart();
 
             // Load any existing promo code from localStorage

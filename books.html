@@ -102,6 +102,15 @@
         .filter-toggle.rotated {
             transform: rotate(180deg);
         }
+        
+        .slide-in-right {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .slide-in-right.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -184,11 +193,18 @@
                 <div>
                     <select id="departmentFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
                         <option value="">All Departments</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="mathematics">Mathematics</option>
-                        <option value="economics">Economics</option>
-                        <option value="engineering">Engineering</option>
                         <option value="medicine">Medicine</option>
+                        <option value="basic-medical-sciences">Basic Medical Sciences</option>
+                        <option value="dentistry">Dentistry</option>
+                        <option value="pharmaceutical-sciences">Pharmaceutical Sciences</option>
+                        <option value="humanities">Humanities</option>
+                        <option value="social-sciences">Social Sciences</option>
+                        <option value="sciences">Sciences</option>
+                        <option value="education">Education</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="agriculture">Agriculture</option>
+                        <option value="management-sciences">Management Sciences</option>
+                        <option value="computing">Faculty of Computing</option>
                     </select>
                 </div>
 
@@ -199,6 +215,12 @@
                         <option value="csc101">CSC 101</option>
                         <option value="mat201">MAT 201</option>
                         <option value="eco101">ECO 101</option>
+                        <option value="med101">MED 101</option>
+                        <option value="phy101">PHY 101</option>
+                        <option value="chm101">CHM 101</option>
+                        <option value="bio101">BIO 101</option>
+                        <option value="eng101">ENG 101</option>
+                        <option value="mth101">MTH 101</option>
                     </select>
                 </div>
             </div>
@@ -305,62 +327,62 @@
     <!-- Featured Categories Section -->
     <section class="py-16 bg-white mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-4 fade-in">Browse by Category</h2>
-            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto fade-in">Find books organized by academic departments</p>
+            <h2 class="text-3xl font-bold text-center mb-4 fade-in">Browse by Faculty</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto fade-in">Find books organized by academic faculties</p>
             
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <!-- Category 1 -->
-                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('computer-science')">
-                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <i class="fas fa-laptop-code text-primary"></i>
-                    </div>
-                    <h3 class="font-semibold">Computer Science</h3>
-                    <p class="text-gray-600 text-sm mt-1">24 books</p>
-                </div>
-                
-                <!-- Category 2 -->
-                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('mathematics')">
-                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <i class="fas fa-calculator text-primary"></i>
-                    </div>
-                    <h3 class="font-semibold">Mathematics</h3>
-                    <p class="text-gray-600 text-sm mt-1">18 books</p>
-                </div>
-                
-                <!-- Category 3 -->
-                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('economics')">
-                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <i class="fas fa-chart-line text-primary"></i>
-                    </div>
-                    <h3 class="font-semibold">Economics</h3>
-                    <p class="text-gray-600 text-sm mt-1">15 books</p>
-                </div>
-                
-                <!-- Category 4 -->
-                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('engineering')">
-                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <i class="fas fa-cogs text-primary"></i>
-                    </div>
-                    <h3 class="font-semibold">Engineering</h3>
-                    <p class="text-gray-600 text-sm mt-1">22 books</p>
-                </div>
-                
-                <!-- Category 5 -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Faculty 1 -->
                 <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('medicine')">
                     <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-stethoscope text-primary"></i>
                     </div>
                     <h3 class="font-semibold">Medicine</h3>
-                    <p class="text-gray-600 text-sm mt-1">30 books</p>
+                    <p class="text-gray-600 text-sm mt-1">45 books</p>
                 </div>
                 
-                <!-- Category 6 -->
+                <!-- Faculty 2 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('computing')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-laptop-code text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Computing</h3>
+                    <p class="text-gray-600 text-sm mt-1">38 books</p>
+                </div>
+                
+                <!-- Faculty 3 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('engineering')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-cogs text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Engineering</h3>
+                    <p class="text-gray-600 text-sm mt-1">52 books</p>
+                </div>
+                
+                <!-- Faculty 4 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('sciences')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-flask text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Sciences</h3>
+                    <p class="text-gray-600 text-sm mt-1">67 books</p>
+                </div>
+                
+                <!-- Faculty 5 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('management-sciences')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-chart-line text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Management</h3>
+                    <p class="text-gray-600 text-sm mt-1">28 books</p>
+                </div>
+                
+                <!-- Faculty 6 -->
                 <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('')">
                     <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-book text-primary"></i>
                     </div>
-                    <h3 class="font-semibold">All Categories</h3>
-                    <p class="text-gray-600 text-sm mt-1">120+ books</p>
+                    <h3 class="font-semibold">All Faculties</h3>
+                    <p class="text-gray-600 text-sm mt-1">350+ books</p>
                 </div>
             </div>
         </div>
@@ -438,15 +460,16 @@
     </footer>
 
     <script>
-        // Sample book data with actual images
+        // Enhanced book data with more books and departments
         const books = [
+            // Computer Science & Computing
             {
                 id: 1,
                 title: "Introduction to Computer Science",
                 author: "Dr. John Smith",
                 price: 4500,
                 rating: 4.5,
-                department: "computer-science",
+                department: "computing",
                 course: "csc101",
                 format: "physical",
                 isbn: "978-0123456789",
@@ -455,37 +478,11 @@
             },
             {
                 id: 2,
-                title: "Advanced Mathematics",
-                author: "Prof. Jane Doe",
-                price: 5200,
-                rating: 4.2,
-                department: "mathematics",
-                course: "mat201",
-                format: "physical",
-                isbn: "978-0123456790",
-                stock: 8,
-                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-            },
-            {
-                id: 3,
-                title: "Principles of Economics",
-                author: "Dr. James Wilson",
-                price: 3800,
-                rating: 4.7,
-                department: "economics",
-                course: "eco101",
-                format: "digital",
-                isbn: "978-0123456791",
-                stock: 25,
-                image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-            },
-            {
-                id: 4,
                 title: "Data Structures and Algorithms",
                 author: "Dr. Sarah Johnson",
                 price: 6200,
                 rating: 4.8,
-                department: "computer-science",
+                department: "computing",
                 course: "csc201",
                 format: "physical",
                 isbn: "978-0123456792",
@@ -493,12 +490,122 @@
                 image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
             },
             {
+                id: 3,
+                title: "Cybersecurity Fundamentals",
+                author: "Prof. Ahmed Bello",
+                price: 5800,
+                rating: 4.6,
+                department: "computing",
+                course: "csc305",
+                format: "physical",
+                isbn: "978-0123456892",
+                stock: 8,
+                image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 4,
+                title: "Database Management Systems",
+                author: "Dr. Fatima Abdul",
+                price: 5200,
+                rating: 4.4,
+                department: "computing",
+                course: "csc202",
+                format: "digital",
+                isbn: "978-0123456893",
+                stock: 20,
+                image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+
+            // Medicine
+            {
                 id: 5,
+                title: "Internal Medicine Principles",
+                author: "Prof. Chinedu Okoro",
+                price: 8500,
+                rating: 4.7,
+                department: "medicine",
+                course: "med401",
+                format: "physical",
+                isbn: "978-0123456795",
+                stock: 10,
+                image: "https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 6,
+                title: "Paediatrics and Child Health",
+                author: "Dr. Grace Williams",
+                price: 7800,
+                rating: 4.9,
+                department: "medicine",
+                course: "med402",
+                format: "physical",
+                isbn: "978-0123456796",
+                stock: 7,
+                image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 7,
+                title: "Surgical Techniques",
+                author: "Prof. Ibrahim Musa",
+                price: 9200,
+                rating: 4.8,
+                department: "medicine",
+                course: "med403",
+                format: "physical",
+                isbn: "978-0123456797",
+                stock: 5,
+                image: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+
+            // Engineering
+            {
+                id: 8,
+                title: "Advanced Mathematics",
+                author: "Prof. Jane Doe",
+                price: 5200,
+                rating: 4.2,
+                department: "engineering",
+                course: "mat201",
+                format: "physical",
+                isbn: "978-0123456790",
+                stock: 8,
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 9,
+                title: "Petroleum Engineering Fundamentals",
+                author: "Dr. Michael Thompson",
+                price: 6800,
+                rating: 4.5,
+                department: "engineering",
+                course: "pet201",
+                format: "physical",
+                isbn: "978-0123456894",
+                stock: 6,
+                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+
+            // Sciences
+            {
+                id: 10,
+                title: "Principles of Economics",
+                author: "Dr. James Wilson",
+                price: 3800,
+                rating: 4.7,
+                department: "sciences",
+                course: "eco101",
+                format: "digital",
+                isbn: "978-0123456791",
+                stock: 25,
+                image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 11,
                 title: "Calculus Made Easy",
                 author: "Prof. Michael Brown",
                 price: 4100,
                 rating: 4.3,
-                department: "mathematics",
+                department: "sciences",
                 course: "mat101",
                 format: "physical",
                 isbn: "978-0123456793",
@@ -506,17 +613,58 @@
                 image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
             },
             {
-                id: 6,
+                id: 12,
                 title: "Microeconomic Theory",
                 author: "Dr. Emily Davis",
                 price: 4800,
                 rating: 4.6,
-                department: "economics",
+                department: "sciences",
                 course: "eco201",
                 format: "digital",
                 isbn: "978-0123456794",
                 stock: 18,
                 image: "https://images.unsplash.com/photo-1588347818120-6dab6320f277?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            },
+
+            // Additional books for other departments
+            {
+                id: 13,
+                title: "Human Anatomy & Physiology",
+                author: "Dr. Susan Chen",
+                price: 7200,
+                rating: 4.7,
+                department: "basic-medical-sciences",
+                course: "bms101",
+                format: "physical",
+                isbn: "978-0123456895",
+                stock: 15,
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 14,
+                title: "Dental Surgery Techniques",
+                author: "Prof. David Lee",
+                price: 8100,
+                rating: 4.8,
+                department: "dentistry",
+                course: "den301",
+                format: "physical",
+                isbn: "978-0123456896",
+                stock: 4,
+                image: "https://images.unsplash.com/photo-1606811841687-b1c0fcb93b43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 15,
+                title: "Pharmaceutical Chemistry",
+                author: "Dr. Robert Kim",
+                price: 5900,
+                rating: 4.4,
+                department: "pharmaceutical-sciences",
+                course: "phs201",
+                format: "physical",
+                isbn: "978-0123456897",
+                stock: 12,
+                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
             }
         ];
 
@@ -561,14 +709,14 @@
                                 ${generateStars(book.rating)}
                                 <span class="ml-1 text-sm text-gray-600">${book.rating}</span>
                             </div>
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded transition-colors duration-300">${book.department}</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded transition-colors duration-300">${getDepartmentName(book.department)}</span>
                         </div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="font-bold text-primary text-lg">₦${book.price.toLocaleString()}</span>
                             <span class="text-sm text-gray-500">Stock: ${book.stock}</span>
                         </div>
                         <button 
-                            onclick="event.stopPropagation(); addToCart(${book.id}, '${book.title.replace(/'/g, "\\'")}', ${book.price})"
+                            onclick="event.stopPropagation(); addToCart(${book.id})"
                             class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center"
                             ${book.stock === 0 ? 'disabled' : ''}
                         >
@@ -577,6 +725,24 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function getDepartmentName(departmentCode) {
+            const departments = {
+                'computing': 'Computing',
+                'medicine': 'Medicine',
+                'basic-medical-sciences': 'Basic Medical',
+                'dentistry': 'Dentistry',
+                'pharmaceutical-sciences': 'Pharmaceutical',
+                'humanities': 'Humanities',
+                'social-sciences': 'Social Sciences',
+                'sciences': 'Sciences',
+                'education': 'Education',
+                'engineering': 'Engineering',
+                'agriculture': 'Agriculture',
+                'management-sciences': 'Management'
+            };
+            return departments[departmentCode] || departmentCode;
         }
 
         function generateStars(rating) {
@@ -637,6 +803,184 @@
         function filterByDepartment(department) {
             document.getElementById('departmentFilter').value = department;
             filterBooks();
+        }
+
+        // Add to cart functionality
+        function addToCart(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === bookId);
+            
+            if (existingItem) {
+                if (existingItem.quantity >= book.stock) {
+                    showToast(`Only ${book.stock} copies available`, 'error');
+                    return;
+                }
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: book.id,
+                    title: book.title,
+                    price: book.price,
+                    quantity: 1,
+                    image: book.image,
+                    author: book.author
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast(`"${book.title}" added to cart`, 'success');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            const cartCount = document.getElementById('cartCount');
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                mobileCartCount.textContent = totalItems;
+                cartCount.style.display = 'flex';
+                mobileCartCount.style.display = 'flex';
+            } else {
+                cartCount.style.display = 'none';
+                mobileCartCount.style.display = 'none';
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            // Remove existing toasts
+            const existingToast = document.querySelector('.toast-message');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const bgColor = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500',
+                warning: 'bg-yellow-500'
+            }[type] || 'bg-gray-500';
+
+            const toastHTML = `
+                <div class="toast-message fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 slide-in-right">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', toastHTML);
+
+            // Show the toast
+            setTimeout(() => {
+                const toast = document.querySelector('.toast-message');
+                if (toast) {
+                    toast.classList.add('show');
+                }
+            }, 10);
+
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                const toast = document.querySelector('.toast-message');
+                if (toast) {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+
+        // Update navigation based on login status
+        function updateNavigation() {
+            const authSection = document.getElementById('authSection');
+            const mobileAuthSection = document.getElementById('mobileAuthSection');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (currentUser) {
+                // User is logged in - show profile icon
+                authSection.innerHTML = `
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors duration-300">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="hidden md:block font-medium">${currentUser.name || 'Profile'}</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-user-circle mr-2"></i>My Profile
+                            </a>
+                            <a href="orders.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                            </a>
+                            <div class="border-t my-1"></div>
+                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                mobileAuthSection.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">${currentUser.name || 'User'}</p>
+                                <p class="text-sm text-gray-600">${currentUser.email || ''}</p>
+                            </div>
+                        </div>
+                        <a href="profile.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-user-circle mr-2"></i>My Profile
+                        </a>
+                        <a href="orders.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <button onclick="logout()" class="w-full text-left text-red-600 hover:text-red-800 font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                `;
+            } else {
+                // User is not logged in - show login/register links
+                authSection.innerHTML = `
+                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Login</a>
+                    <span class="text-gray-400 mx-2">|</span>
+                    <a href="register.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Register</a>
+                `;
+                
+                mobileAuthSection.innerHTML = `
+                    <a href="login.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Login</a>
+                    <a href="register.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Register</a>
+                `;
+            }
+        }
+
+        // Logout function
+        window.logout = function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                updateNavigation();
+                showToast('You have been logged out successfully', 'success');
+                
+                // Redirect to home page after logout
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
         }
 
         // Event listeners for filters
@@ -722,69 +1066,9 @@
                 }
             });
             
-            // Add to cart functionality (basic example)
-            const addToCartButtons = document.querySelectorAll('.bg-primary');
-            const cartCount = document.getElementById('cartCount');
-            const mobileCartCount = document.getElementById('mobileCartCount');
-            let cartItems = 0;
-            
-            function addToCart(bookId, title, price) {
-                cartItems++;
-                cartCount.textContent = cartItems;
-                mobileCartCount.textContent = cartItems;
-                
-                // Show cart count badges
-                cartCount.style.display = 'flex';
-                mobileCartCount.style.display = 'flex';
-                
-                // Add animation to cart icon
-                cartCount.classList.add('animate-pulse');
-                setTimeout(() => {
-                    cartCount.classList.remove('animate-pulse');
-                }, 500);
-                
-                // Show success message
-                const successMessage = document.createElement('div');
-                successMessage.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full';
-                successMessage.innerHTML = `
-                    <div class="flex items-center">
-                        <i class="fas fa-check-circle mr-2"></i>
-                        <span>Added "${title}" to cart</span>
-                    </div>
-                `;
-                document.body.appendChild(successMessage);
-                
-                // Animate in
-                setTimeout(() => {
-                    successMessage.classList.remove('translate-x-full');
-                }, 100);
-                
-                // Animate out and remove
-                setTimeout(() => {
-                    successMessage.classList.add('translate-x-full');
-                    setTimeout(() => {
-                        document.body.removeChild(successMessage);
-                    }, 300);
-                }, 3000);
-            }
-            
-            // Expose to global scope
-            window.addToCart = addToCart;
-            
-            // Auth section placeholder
-            const authSection = document.getElementById('authSection');
-            const mobileAuthSection = document.getElementById('mobileAuthSection');
-            
-            authSection.innerHTML = `
-                <a href="login.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Login</a>
-                <span class="text-gray-400 mx-2">|</span>
-                <a href="register.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Register</a>
-            `;
-            
-            mobileAuthSection.innerHTML = `
-                <a href="login.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Login</a>
-                <a href="register.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Register</a>
-            `;
+            // Update navigation and cart count
+            updateNavigation();
+            updateCartCount();
 
             // Initial render
             setTimeout(() => {

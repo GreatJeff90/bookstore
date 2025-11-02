@@ -496,6 +496,106 @@
 document.addEventListener('DOMContentLoaded', function() {
     updateNavigation();
 });
+// Enhanced checkout functionality
+function processPayment() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        showToast('Your cart is empty. Please add some books before checking out.', 'error');
+        return;
+    }
+
+    // Validate shipping form
+    if (!validateForm()) {
+        showToast('Please fill in all required shipping information correctly.', 'error');
+        return;
+    }
+    
+    // Validate card details
+    if (!validateCardDetails()) {
+        return;
+    }
+
+    // Get form data
+    const formData = new FormData(document.getElementById('shippingForm'));
+    const shippingInfo = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        department: formData.get('department'),
+        room: formData.get('room')
+    };
+
+    // Show processing modal
+    const modal = document.getElementById('paymentModal');
+    const processingText = document.getElementById('processingText');
+    modal.classList.remove('hidden');
+    
+    // Generate unique order ID
+    const orderId = generateOrderId();
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shipping = 500;
+    const tax = Math.round(subtotal * 0.075);
+    const total = subtotal + shipping + tax;
+    
+    // Create comprehensive order record
+    const order = {
+        id: orderId,
+        date: new Date().toISOString(),
+        items: [...cart], // Copy cart items
+        subtotal: subtotal,
+        shipping: shipping,
+        tax: tax,
+        total: total,
+        status: 'processing',
+        progress: 25,
+        shippingInfo: shippingInfo,
+        payment: {
+            method: 'paystack',
+            reference: document.getElementById('transactionRef').textContent,
+            status: 'completed',
+            timestamp: new Date().toISOString()
+        },
+        delivery: {
+            estimated: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+            status: 'processing'
+        },
+        tracking: {
+            steps: [
+                { name: 'order_placed', completed: true, date: new Date().toISOString() },
+                { name: 'processing', completed: true, date: new Date().toISOString() },
+                { name: 'shipped', completed: false, date: null },
+                { name: 'out_for_delivery', completed: false, date: null },
+                { name: 'delivered', completed: false, date: null }
+            ]
+        }
+    };
+    
+    // Save order to localStorage
+    saveOrder(order);
+    
+    // Clear cart
+    localStorage.removeItem('cart');
+    
+    // Update UI
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        showOrderSuccess(order);
+    }, 2000);
+}
+
+function generateOrderId() {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    return `UNIPORT-${timestamp}-${random}`;
+}
+
+function saveOrder(order) {
+    const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+    orders.unshift(order); // Add new order to beginning of array
+    localStorage.setItem('userOrders', JSON.stringify(orders));
+}
     </script>
 </body>
 </html>
