@@ -4,24 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNIPORT Bookstore - Book Catalog</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0000ff',
-                        secondary: '#F2A900',
+                        primary: '#0000ff', // UNIPORT Blue
+                        secondary: '#F2A900', // UNIPORT Gold
+                    },
+                    transitionProperty: {
+                        'height': 'height',
+                        'spacing': 'margin, padding',
                     }
                 }
             }
         }
     </script>
+    
+    <style>
+        /* Custom CSS for transitions and animations */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        
+        .book-image {
+            transition: transform 0.5s ease;
+        }
+        
+        .book-card:hover .book-image {
+            transform: scale(1.05);
+        }
+        
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-header.scrolled {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .filter-section {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-toggle.rotated {
+            transform: rotate(180deg);
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation Header -->
-    <header class="bg-white shadow-sm border-b">
+    <header class="bg-white shadow-sm border-b sticky-header transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -29,19 +114,18 @@
                     <div class="text-white p-2 rounded-lg">
                         <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
-                    <span class="ml-2 text-xl font-bold text-gray-900">
+                    <span class="ml-2 text-xl font-bold text-gray-900 transition-colors duration-300">
                         UNIPORT Bookstore
                     </span>
                 </div>
 
                 <!-- Navigation Links -->
-                <!-- Enhanced Navigation for all pages -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
-                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
-                    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Home</a>
+                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Books</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative transition-colors duration-300">
                         <i class="fas fa-shopping-cart"></i> Cart
-                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
                     </a>
                     <div class="relative group" id="authSection">
                         <!-- This will be populated by JavaScript -->
@@ -49,22 +133,37 @@
                 </nav>
 
                 <!-- Mobile menu button -->
-                <button class="md:hidden p-2 text-gray-600">
-                    <i class="fas fa-bars"></i>
+                <button id="mobileMenuButton" class="md:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-300">
+                    <i class="fas fa-bars text-xl"></i>
                 </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t">
+                <div class="py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Home</a>
+                    <a href="books.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Books</a>
+                    <a href="cart.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Cart
+                        <span id="mobileCartCount" class="absolute -top-1 left-20 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
+                    </a>
+                    <div id="mobileAuthSection" class="pt-2 border-t">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Book Catalog</h1>
-            <p class="text-gray-600">Find your course materials and textbooks</p>
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 transition-all duration-500">Book Catalog</h1>
+            <p class="text-gray-600 transition-all duration-500 delay-100">Find your course materials and textbooks</p>
         </div>
 
         <!-- Search and Filter Section -->
-        <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-8 hover-lift transition-all duration-300">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <!-- Search Bar -->
                 <div class="lg:col-span-2">
@@ -76,14 +175,14 @@
                             type="text" 
                             id="searchInput"
                             placeholder="Search by title, author, ISBN, or course..."
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
                         >
                     </div>
                 </div>
 
                 <!-- Department Filter -->
                 <div>
-                    <select id="departmentFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <select id="departmentFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
                         <option value="">All Departments</option>
                         <option value="computer-science">Computer Science</option>
                         <option value="mathematics">Mathematics</option>
@@ -95,7 +194,7 @@
 
                 <!-- Course Filter -->
                 <div>
-                    <select id="courseFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <select id="courseFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
                         <option value="">All Courses</option>
                         <option value="csc101">CSC 101</option>
                         <option value="mat201">MAT 201</option>
@@ -104,12 +203,19 @@
                 </div>
             </div>
 
+            <!-- Additional Filters Toggle -->
+            <div class="mt-4 flex justify-center">
+                <button id="filterToggle" class="text-primary font-medium flex items-center transition-all duration-300 filter-toggle">
+                    More Filters <i class="fas fa-chevron-down ml-2 text-sm"></i>
+                </button>
+            </div>
+
             <!-- Additional Filters -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div id="additionalFilters" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 filter-section hidden">
                 <!-- Price Range -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
-                    <select id="priceFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <select id="priceFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
                         <option value="">All Prices</option>
                         <option value="0-3000">₦0 - ₦3,000</option>
                         <option value="3001-6000">₦3,001 - ₦6,000</option>
@@ -121,7 +227,7 @@
                 <!-- Format -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
-                    <select id="formatFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <select id="formatFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
                         <option value="">All Formats</option>
                         <option value="physical">Physical Copy</option>
                         <option value="digital">Digital Copy</option>
@@ -131,7 +237,7 @@
                 <!-- Sort By -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
-                    <select id="sortFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <select id="sortFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
                         <option value="relevance">Relevance</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
@@ -142,30 +248,195 @@
             </div>
         </div>
 
+        <!-- Results Summary -->
+        <div class="mb-6 fade-in">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <p id="resultsCount" class="text-gray-600 mb-2 md:mb-0">Loading books...</p>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">View:</span>
+                    <div class="flex bg-gray-100 rounded-lg p-1">
+                        <button id="gridView" class="p-2 rounded-md bg-primary text-white transition-all duration-300">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button id="listView" class="p-2 rounded-md text-gray-600 hover:text-primary transition-all duration-300">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Books Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="booksGrid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 fade-in" id="booksGrid">
             <!-- Books will be dynamically loaded here -->
         </div>
 
         <!-- Loading and No Results -->
-        <div id="loading" class="text-center py-12">
+        <div id="loading" class="text-center py-12 fade-in">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
             <p class="mt-4 text-gray-600">Loading books...</p>
         </div>
 
-        <div id="noResults" class="hidden text-center py-12">
+        <div id="noResults" class="hidden text-center py-12 fade-in">
             <i class="fas fa-search text-gray-400 text-6xl mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-900 mb-2">No books found</h3>
             <p class="text-gray-600">Try adjusting your search or filters</p>
+            <button id="resetFilters" class="mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
+                Reset Filters
+            </button>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="mt-12 flex justify-center hidden fade-in">
+            <nav class="flex items-center space-x-2">
+                <button class="p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="w-10 h-10 rounded-lg bg-primary text-white transition-colors duration-300">1</button>
+                <button class="w-10 h-10 rounded-lg bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300">2</button>
+                <button class="w-10 h-10 rounded-lg bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300">3</button>
+                <button class="p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </nav>
         </div>
     </div>
 
+    <!-- Featured Categories Section -->
+    <section class="py-16 bg-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 fade-in">Browse by Category</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto fade-in">Find books organized by academic departments</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <!-- Category 1 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('computer-science')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-laptop-code text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Computer Science</h3>
+                    <p class="text-gray-600 text-sm mt-1">24 books</p>
+                </div>
+                
+                <!-- Category 2 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('mathematics')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-calculator text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Mathematics</h3>
+                    <p class="text-gray-600 text-sm mt-1">18 books</p>
+                </div>
+                
+                <!-- Category 3 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('economics')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-chart-line text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Economics</h3>
+                    <p class="text-gray-600 text-sm mt-1">15 books</p>
+                </div>
+                
+                <!-- Category 4 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('engineering')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-cogs text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Engineering</h3>
+                    <p class="text-gray-600 text-sm mt-1">22 books</p>
+                </div>
+                
+                <!-- Category 5 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('medicine')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-stethoscope text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">Medicine</h3>
+                    <p class="text-gray-600 text-sm mt-1">30 books</p>
+                </div>
+                
+                <!-- Category 6 -->
+                <div class="bg-gray-50 rounded-lg p-6 text-center hover-lift transition-all duration-300 cursor-pointer" onclick="filterByDepartment('')">
+                    <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-book text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold">All Categories</h3>
+                    <p class="text-gray-600 text-sm mt-1">120+ books</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-primary text-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4 fade-in">Stay Updated</h2>
+            <p class="text-xl mb-8 opacity-90 fade-in">Subscribe to our newsletter for new arrivals, discounts, and academic resources</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto fade-in">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-secondary transition-all duration-300">
+                <button class="bg-secondary text-white px-6 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition-colors duration-300">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 mt-12">
-        <!-- Same footer as index.html -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="fade-in">
+                    <h3 class="text-lg font-semibold mb-4">UNIPORT Bookstore</h3>
+                    <p class="text-gray-400">
+                        Your trusted source for academic materials and textbooks at University of Port Harcourt.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="fade-in">
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="books.html" class="hover:text-white transition-colors duration-300">Books</a></li>
+                        <li><a href="cart.html" class="hover:text-white transition-colors duration-300">Shopping Cart</a></li>
+                    </ul>
+                </div>
+                
+                <div class="fade-in">
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Shipping Info</a></li>
+                    </ul>
+                </div>
+                
+                <div class="fade-in">
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <div class="text-gray-400 space-y-2">
+                        <p><i class="fas fa-university mr-2"></i>University of Port Harcourt</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Choba, Rivers State</p>
+                        <p><i class="fas fa-envelope mr-2"></i>bookstore@uniport.edu.ng</p>
+                        <p><i class="fas fa-phone mr-2"></i>+234 (0) 123 456 7890</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 fade-in">
+                <p>&copy; 2025 UNIPORT Bookstore. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/main.js"></script>
     <script>
         // Sample book data with actual images
         const books = [
@@ -253,23 +524,36 @@
             const booksGrid = document.getElementById('booksGrid');
             const loading = document.getElementById('loading');
             const noResults = document.getElementById('noResults');
+            const resultsCount = document.getElementById('resultsCount');
+            const pagination = document.getElementById('pagination');
 
             loading.classList.add('hidden');
             
             if (booksToRender.length === 0) {
                 noResults.classList.remove('hidden');
                 booksGrid.innerHTML = '';
+                resultsCount.textContent = 'No books found';
+                pagination.classList.add('hidden');
                 return;
             }
 
             noResults.classList.add('hidden');
+            resultsCount.textContent = `Showing ${booksToRender.length} of ${books.length} books`;
+            
+            if (booksToRender.length > 8) {
+                pagination.classList.remove('hidden');
+            } else {
+                pagination.classList.add('hidden');
+            }
             
             booksGrid.innerHTML = booksToRender.map(book => `
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow book-card cursor-pointer" onclick="viewBookDetails(${book.id})">
-                    <div class="p-4">
-                        <div class="bg-gray-200 h-48 rounded-lg mb-4 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-md hover-lift book-card cursor-pointer overflow-hidden transition-all duration-300" onclick="viewBookDetails(${book.id})">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-48 rounded-t-lg flex items-center justify-center book-image">
                             <img src="${book.image}" alt="${book.title}" class="w-full h-full object-cover">
                         </div>
+                    </div>
+                    <div class="p-4">
                         <h3 class="font-semibold text-lg mb-2 line-clamp-2">${book.title}</h3>
                         <p class="text-gray-600 text-sm mb-2">${book.author}</p>
                         <div class="flex items-center justify-between mb-2">
@@ -277,7 +561,7 @@
                                 ${generateStars(book.rating)}
                                 <span class="ml-1 text-sm text-gray-600">${book.rating}</span>
                             </div>
-                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${book.department}</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded transition-colors duration-300">${book.department}</span>
                         </div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="font-bold text-primary text-lg">₦${book.price.toLocaleString()}</span>
@@ -285,7 +569,7 @@
                         </div>
                         <button 
                             onclick="event.stopPropagation(); addToCart(${book.id}, '${book.title.replace(/'/g, "\\'")}', ${book.price})"
-                            class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center"
+                            class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center"
                             ${book.stock === 0 ? 'disabled' : ''}
                         >
                             ${book.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
@@ -350,6 +634,11 @@
             window.location.href = `book-details.html?id=${bookId}`;
         }
 
+        function filterByDepartment(department) {
+            document.getElementById('departmentFilter').value = department;
+            filterBooks();
+        }
+
         // Event listeners for filters
         document.getElementById('searchInput').addEventListener('input', filterBooks);
         document.getElementById('departmentFilter').addEventListener('change', filterBooks);
@@ -357,17 +646,150 @@
         document.getElementById('priceFilter').addEventListener('change', filterBooks);
         document.getElementById('formatFilter').addEventListener('change', filterBooks);
         document.getElementById('sortFilter').addEventListener('change', filterBooks);
+        
+        // Additional filters toggle
+        document.getElementById('filterToggle').addEventListener('click', function() {
+            const additionalFilters = document.getElementById('additionalFilters');
+            const toggleIcon = this.querySelector('i');
+            
+            if (additionalFilters.classList.contains('hidden')) {
+                additionalFilters.classList.remove('hidden');
+                toggleIcon.classList.add('rotated');
+            } else {
+                additionalFilters.classList.add('hidden');
+                toggleIcon.classList.remove('rotated');
+            }
+        });
+        
+        // Reset filters
+        document.getElementById('resetFilters').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('departmentFilter').value = '';
+            document.getElementById('courseFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            document.getElementById('formatFilter').value = '';
+            document.getElementById('sortFilter').value = 'relevance';
+            filterBooks();
+        });
 
-        // Initial render
+        // Mobile menu functionality
         document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+                
+                // Change icon based on menu state
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Fade in elements on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Check on load
+            fadeInOnScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // Sticky header effect
+            const header = document.querySelector('.sticky-header');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Add to cart functionality (basic example)
+            const addToCartButtons = document.querySelectorAll('.bg-primary');
+            const cartCount = document.getElementById('cartCount');
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            let cartItems = 0;
+            
+            function addToCart(bookId, title, price) {
+                cartItems++;
+                cartCount.textContent = cartItems;
+                mobileCartCount.textContent = cartItems;
+                
+                // Show cart count badges
+                cartCount.style.display = 'flex';
+                mobileCartCount.style.display = 'flex';
+                
+                // Add animation to cart icon
+                cartCount.classList.add('animate-pulse');
+                setTimeout(() => {
+                    cartCount.classList.remove('animate-pulse');
+                }, 500);
+                
+                // Show success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full';
+                successMessage.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <span>Added "${title}" to cart</span>
+                    </div>
+                `;
+                document.body.appendChild(successMessage);
+                
+                // Animate in
+                setTimeout(() => {
+                    successMessage.classList.remove('translate-x-full');
+                }, 100);
+                
+                // Animate out and remove
+                setTimeout(() => {
+                    successMessage.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(successMessage);
+                    }, 300);
+                }, 3000);
+            }
+            
+            // Expose to global scope
+            window.addToCart = addToCart;
+            
+            // Auth section placeholder
+            const authSection = document.getElementById('authSection');
+            const mobileAuthSection = document.getElementById('mobileAuthSection');
+            
+            authSection.innerHTML = `
+                <a href="login.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Login</a>
+                <span class="text-gray-400 mx-2">|</span>
+                <a href="register.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Register</a>
+            `;
+            
+            mobileAuthSection.innerHTML = `
+                <a href="login.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Login</a>
+                <a href="register.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Register</a>
+            `;
+
+            // Initial render
             setTimeout(() => {
                 renderBooks(books);
             }, 1000); // Simulate loading delay
-        });
-
-        // Add this to every page
-        document.addEventListener('DOMContentLoaded', function() {
-            updateNavigation();
         });
     </script>
 </body>
