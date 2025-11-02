@@ -27,7 +27,7 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <div class="text-white p-2 rounded-lg">
-                                               <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
+                        <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
                     <span class="ml-2 text-xl font-bold text-gray-900">
                         UNIPORT Bookstore
@@ -90,25 +90,14 @@
                 <div>
                     <!-- Main Image -->
                     <div class="bg-white rounded-lg shadow-sm border p-8 mb-4">
-                        <div class="bg-gray-200 h-96 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-book text-gray-400 text-8xl"></i>
+                        <div class="bg-gray-200 h-96 rounded-lg flex items-center justify-center overflow-hidden">
+                            <img id="mainBookImage" src="" alt="Book Cover" class="w-full h-full object-cover">
                         </div>
                     </div>
 
                     <!-- Thumbnail Images -->
-                    <div class="grid grid-cols-4 gap-4">
-                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer border-2 border-primary">
-                            <i class="fas fa-book text-gray-400 text-2xl"></i>
-                        </div>
-                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer">
-                            <i class="fas fa-book-open text-gray-400 text-2xl"></i>
-                        </div>
-                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer">
-                            <i class="fas fa-book text-gray-400 text-2xl"></i>
-                        </div>
-                        <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer">
-                            <i class="fas fa-book-open text-gray-400 text-2xl"></i>
-                        </div>
+                    <div class="grid grid-cols-4 gap-4" id="thumbnailImages">
+                        <!-- Thumbnails will be dynamically generated -->
                     </div>
                 </div>
 
@@ -314,7 +303,7 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Sample book database (same as in books.html)
+        // Sample book database with images (same as in books.html)
         const bookDatabase = {
             1: {
                 id: 1,
@@ -332,6 +321,7 @@
                 pages: 320,
                 publisher: "UNIPORT Press",
                 stock: 15,
+                image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
                 description: "This comprehensive textbook provides a thorough introduction to the fundamental concepts of computer science. Written specifically for University of Port Harcourt students, it covers programming basics, algorithms, data structures, and computational thinking.",
                 keyFeatures: [
                     "Tailored for UNIPORT Computer Science curriculum",
@@ -380,6 +370,7 @@
                 pages: 280,
                 publisher: "UNIPORT Press",
                 stock: 8,
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
                 description: "Advanced mathematical concepts tailored for engineering and science students. Includes calculus, linear algebra, and differential equations with practical applications.",
                 keyFeatures: [
                     "Comprehensive coverage of advanced topics",
@@ -422,6 +413,7 @@
                 pages: 350,
                 publisher: "UNIPORT Press",
                 stock: 25,
+                image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
                 description: "Comprehensive introduction to economic principles with Nigerian case studies. Perfect for first-year economics students.",
                 keyFeatures: [
                     "Nigerian economic case studies",
@@ -463,6 +455,7 @@
                 pages: 420,
                 publisher: "UNIPORT Press",
                 stock: 12,
+                image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
                 description: "In-depth coverage of data structures and algorithms with Python implementations. Essential for computer science majors.",
                 keyFeatures: [
                     "Python code examples",
@@ -498,6 +491,7 @@
                 pages: 300,
                 publisher: "UNIPORT Press",
                 stock: 20,
+                image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
                 description: "Step-by-step guide to calculus concepts with numerous examples and practice problems.",
                 keyFeatures: [
                     "Beginner-friendly approach",
@@ -540,6 +534,7 @@
                 pages: 380,
                 publisher: "UNIPORT Press",
                 stock: 18,
+                image: "https://images.unsplash.com/photo-1588347818120-6dab6320f277?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
                 description: "Advanced microeconomic theory with applications to Nigerian market structures.",
                 keyFeatures: [
                     "Advanced theoretical concepts",
@@ -643,6 +638,27 @@
             // Update breadcrumb
             document.getElementById('breadcrumbTitle').textContent = currentBook.title;
             
+            // Update book images
+            document.getElementById('mainBookImage').src = currentBook.image;
+            document.getElementById('mainBookImage').alt = currentBook.title;
+            
+            // Generate thumbnail images
+            const thumbnailContainer = document.getElementById('thumbnailImages');
+            thumbnailContainer.innerHTML = `
+                <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer border-2 border-primary overflow-hidden">
+                    <img src="${currentBook.image}" alt="${currentBook.title}" class="w-full h-full object-cover">
+                </div>
+                <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden">
+                    <img src="${currentBook.image}" alt="${currentBook.title}" class="w-full h-full object-cover">
+                </div>
+                <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden">
+                    <img src="${currentBook.image}" alt="${currentBook.title}" class="w-full h-full object-cover">
+                </div>
+                <div class="bg-gray-100 h-20 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden">
+                    <img src="${currentBook.image}" alt="${currentBook.title}" class="w-full h-full object-cover">
+                </div>
+            `;
+            
             // Update basic book information
             document.getElementById('bookTitle').textContent = currentBook.title;
             document.getElementById('bookAuthor').textContent = `by ${currentBook.author}`;
@@ -742,8 +758,8 @@
             if (relatedBooks.length > 0) {
                 relatedBooksContainer.innerHTML = relatedBooks.map(book => `
                     <div class="bg-white rounded-lg shadow-sm border p-4 flex items-center space-x-3 cursor-pointer hover:shadow-md transition-shadow" onclick="viewBookDetails(${book.id})">
-                        <div class="bg-gray-200 w-16 h-20 rounded flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-book text-gray-400"></i>
+                        <div class="bg-gray-200 w-16 h-20 rounded flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            <img src="${book.image}" alt="${book.title}" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-900">${book.title}</h4>

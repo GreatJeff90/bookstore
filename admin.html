@@ -320,16 +320,7 @@
             loadRecentOrders();
             loadLowStockAlerts();
             loadRecentActivity();
-            checkAdminAccess();
-        }
-
-        function checkAdminAccess() {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            if (!user || user.role !== 'admin') {
-                alert('Access denied. Admin privileges required.');
-                window.location.href = 'login.html';
-                return;
-            }
+            // Removed admin access check to allow everyone
         }
 
         function loadStats() {

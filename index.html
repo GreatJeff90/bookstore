@@ -8,9 +8,6 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles/custom.css">
-    
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -22,15 +19,75 @@
                     colors: {
                         primary: '#0000ff', // UNIPORT Blue
                         secondary: '#F2A900', // UNIPORT Gold
+                    },
+                    transitionProperty: {
+                        'height': 'height',
+                        'spacing': 'margin, padding',
                     }
                 }
             }
         }
     </script>
+    
+    <style>
+        /* Custom CSS for transitions and animations */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        
+        .book-image {
+            transition: transform 0.5s ease;
+        }
+        
+        .book-card:hover .book-image {
+            transform: scale(1.05);
+        }
+        
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-header.scrolled {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation Header -->
-    <header class="bg-white shadow-sm border-b">
+    <header class="bg-white shadow-sm border-b sticky-header transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -38,47 +95,62 @@
                     <div class=" text-white p-2 rounded-lg">
                         <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
-                    <span class="ml-2 text-xl font-bold text-gray-900">
+                    <span class="ml-2 text-xl font-bold text-gray-900 transition-colors duration-300">
                         UNIPORT Bookstore
                     </span>
                 </div>
 
                 <!-- Navigation Links -->
-               <!-- Enhanced Navigation for all pages -->
-<nav class="hidden md:flex items-center space-x-8">
-    <a href="index.html" class="text-gray-700 hover:text-primary font-medium">Home</a>
-    <a href="books.html" class="text-gray-700 hover:text-primary font-medium">Books</a>
-    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative">
-        <i class="fas fa-shopping-cart"></i> Cart
-        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
-    </a>
-    <div class="relative group" id="authSection">
-        <!-- This will be populated by JavaScript -->
-    </div>
-</nav>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Home</a>
+                    <a href="books.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Books</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-primary font-medium relative transition-colors duration-300">
+                        <i class="fas fa-shopping-cart"></i> Cart
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
+                    </a>
+                    <div class="relative group" id="authSection">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                </nav>
 
                 <!-- Mobile menu button -->
-                <button class="md:hidden p-2 text-gray-600">
-                    <i class="fas fa-bars"></i>
+                <button id="mobileMenuButton" class="md:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-300">
+                    <i class="fas fa-bars text-xl"></i>
                 </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t">
+                <div class="py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Home</a>
+                    <a href="books.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Books</a>
+                    <a href="cart.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Cart
+                        <span id="mobileCartCount" class="absolute -top-1 left-20 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
+                    </a>
+                    <div id="mobileAuthSection" class="pt-2 border-t">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-primary to-primary/90 text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-2xl">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+    <section class="bg-gradient-to-r from-primary to-primary/90 text-white py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-2xl fade-in">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 transition-all duration-500">
                     Welcome to UNIPORT Bookstore
                 </h1>
-                <p class="text-xl mb-8 opacity-90">
+                <p class="text-xl mb-8 opacity-90 transition-all duration-500 delay-100">
                     Your one-stop destination for academic textbooks, course materials, and educational resources.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex flex-col sm:flex-row gap-4 transition-all duration-500 delay-200">
                     <a href="books.html" 
-                       class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
-                        Browse Books <i class="fas fa-arrow-right ml-2"></i>
+                       class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 hover-lift text-center">
+                        Browse Books <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
                     </a>
                     <a href="register.html" 
                        class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors text-center">
@@ -89,18 +161,54 @@
         </div>
     </section>
 
+    <!-- About Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <h2 class="text-3xl font-bold mb-6">About UNIPORT Bookstore</h2>
+                    <p class="text-gray-600 mb-4">
+                        Established to serve the academic community of the University of Port Harcourt, our bookstore provides students and faculty with access to essential textbooks, reference materials, and academic resources.
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        We work closely with departments across the university to ensure we stock the most relevant and up-to-date materials for all courses.
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-primary/10 p-3 rounded-lg">
+                            <i class="fas fa-book text-primary text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Wide Selection</h3>
+                            <p class="text-gray-600">Books for all departments and courses</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fade-in">
+                    <div class="bg-gray-200 rounded-lg overflow-hidden h-80 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                             alt="UNIPORT Bookstore Interior" class="w-full h-full object-cover transition-all duration-500 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Featured Books Section -->
     <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12">Featured Books</h2>
+            <h2 class="text-3xl font-bold text-center mb-4 fade-in">Featured Books</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto fade-in">Discover our most popular textbooks and academic resources</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Book Card 1 -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-6">
-                        <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
-                            <i class="fas fa-book text-gray-400 text-6xl"></i>
+                <div class="bg-white rounded-lg shadow-md hover-lift book-card overflow-hidden">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-48 rounded-t-lg flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="Introduction to Computer Science" class="w-full h-full object-cover">
                         </div>
+                    </div>
+                    <div class="p-6">
                         <h3 class="font-semibold text-xl mb-2">Introduction to Computer Science</h3>
                         <p class="text-gray-600 mb-2">Dr. John Smith</p>
                         <div class="flex items-center justify-between mb-4">
@@ -110,18 +218,21 @@
                             </div>
                             <span class="font-bold text-primary text-lg">₦4,500</span>
                         </div>
-                        <button class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                        <button class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors duration-300">
                             Add to Cart
                         </button>
                     </div>
                 </div>
 
                 <!-- Book Card 2 -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-6">
-                        <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
-                            <i class="fas fa-book text-gray-400 text-6xl"></i>
+                <div class="bg-white rounded-lg shadow-md hover-lift book-card overflow-hidden">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-48 rounded-t-lg flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="Advanced Mathematics" class="w-full h-full object-cover">
                         </div>
+                    </div>
+                    <div class="p-6">
                         <h3 class="font-semibold text-xl mb-2">Advanced Mathematics</h3>
                         <p class="text-gray-600 mb-2">Prof. Jane Doe</p>
                         <div class="flex items-center justify-between mb-4">
@@ -131,18 +242,21 @@
                             </div>
                             <span class="font-bold text-primary text-lg">₦5,200</span>
                         </div>
-                        <button class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                        <button class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors duration-300">
                             Add to Cart
                         </button>
                     </div>
                 </div>
 
                 <!-- Book Card 3 -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div class="p-6">
-                        <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
-                            <i class="fas fa-book text-gray-400 text-6xl"></i>
+                <div class="bg-white rounded-lg shadow-md hover-lift book-card overflow-hidden">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-48 rounded-t-lg flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="Principles of Economics" class="w-full h-full object-cover">
                         </div>
+                    </div>
+                    <div class="p-6">
                         <h3 class="font-semibold text-xl mb-2">Principles of Economics</h3>
                         <p class="text-gray-600 mb-2">Dr. James Wilson</p>
                         <div class="flex items-center justify-between mb-4">
@@ -152,17 +266,99 @@
                             </div>
                             <span class="font-bold text-primary text-lg">₦3,800</span>
                         </div>
-                        <button class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                        <button class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors duration-300">
                             Add to Cart
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-12">
-                <a href="books.html" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors inline-flex items-center">
-                    View All Books <i class="fas fa-arrow-right ml-2"></i>
+            <div class="text-center mt-12 fade-in">
+                <a href="books.html" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300 inline-flex items-center hover-lift">
+                    View All Books <i class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 fade-in">New Arrivals</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto fade-in">Check out our latest additions to the collection</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- New Book 1 -->
+                <div class="bg-white rounded-lg shadow-md hover-lift overflow-hidden transition-all duration-300">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-40 flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="Organic Chemistry" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">Organic Chemistry</h3>
+                        <p class="text-gray-600 text-sm mb-2">Dr. Sarah Johnson</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-primary">₦6,500</span>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded">New</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Book 2 -->
+                <div class="bg-white rounded-lg shadow-md hover-lift overflow-hidden transition-all duration-300">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-40 flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="Business Management" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">Business Management</h3>
+                        <p class="text-gray-600 text-sm mb-2">Prof. Michael Brown</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-primary">₦4,800</span>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded">New</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Book 3 -->
+                <div class="bg-white rounded-lg shadow-md hover-lift overflow-hidden transition-all duration-300">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-40 flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="Statistical Methods" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">Statistical Methods</h3>
+                        <p class="text-gray-600 text-sm mb-2">Dr. Lisa Anderson</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-primary">₦5,500</span>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded">New</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Book 4 -->
+                <div class="bg-white rounded-lg shadow-md hover-lift overflow-hidden transition-all duration-300">
+                    <div class="overflow-hidden">
+                        <div class="bg-gray-200 h-40 flex items-center justify-center book-image">
+                            <img src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="African Literature" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">African Literature</h3>
+                        <p class="text-gray-600 text-sm mb-2">Prof. Chinua Adebayo</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-primary">₦3,900</span>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded">New</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -170,25 +366,26 @@
     <!-- Features Section -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 fade-in">Why Choose UNIPORT Bookstore?</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center p-6">
-                    <div class="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div class="text-center p-6 hover-lift transition-all duration-300">
+                    <div class="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:bg-primary/20">
                         <i class="fas fa-shipping-fast text-primary text-2xl"></i>
                     </div>
                     <h3 class="font-semibold text-xl mb-2">Fast Delivery</h3>
                     <p class="text-gray-600">Quick delivery across campus and surrounding areas</p>
                 </div>
                 
-                <div class="text-center p-6">
-                    <div class="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div class="text-center p-6 hover-lift transition-all duration-300">
+                    <div class="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:bg-primary/20">
                         <i class="fas fa-shield-alt text-primary text-2xl"></i>
                     </div>
                     <h3 class="font-semibold text-xl mb-2">Secure Payment</h3>
                     <p class="text-gray-600">Paystack secured transactions with multiple payment options</p>
                 </div>
                 
-                <div class="text-center p-6">
-                    <div class="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div class="text-center p-6 hover-lift transition-all duration-300">
+                    <div class="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:bg-primary/20">
                         <i class="fas fa-graduation-cap text-primary text-2xl"></i>
                     </div>
                     <h3 class="font-semibold text-xl mb-2">Course Relevant</h3>
@@ -198,52 +395,241 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 fade-in">What Our Students Say</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto fade-in">Hear from students who have used our bookstore</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md hover-lift transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Chinwe Okoro</h4>
+                            <p class="text-gray-600 text-sm">Computer Science</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"The UNIPORT Bookstore made it so easy to find all my course materials. The delivery was fast and the books were in perfect condition."</p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md hover-lift transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Emeka Nwankwo</h4>
+                            <p class="text-gray-600 text-sm">Business Administration</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"I was able to get all my textbooks for the semester in one place. The prices are reasonable and the service is excellent."</p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md hover-lift transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Amina Suleiman</h4>
+                            <p class="text-gray-600 text-sm">Medicine & Surgery</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"As a medical student, I need specific textbooks that are often hard to find. UNIPORT Bookstore always has what I need in stock."</p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-primary text-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4 fade-in">Stay Updated</h2>
+            <p class="text-xl mb-8 opacity-90 fade-in">Subscribe to our newsletter for new arrivals, discounts, and academic resources</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto fade-in">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-secondary">
+                <button class="bg-secondary text-white px-6 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition-colors duration-300">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
+                <div class="fade-in">
                     <h3 class="text-lg font-semibold mb-4">UNIPORT Bookstore</h3>
                     <p class="text-gray-400">
                         Your trusted source for academic materials and textbooks at University of Port Harcourt.
                     </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
                 
-                <div>
+                <div class="fade-in">
                     <h4 class="font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="books.html" class="hover:text-white transition-colors">Books</a></li>
-                        <li><a href="cart.html" class="hover:text-white transition-colors">Shopping Cart</a></li>
+                        <li><a href="index.html" class="hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="books.html" class="hover:text-white transition-colors duration-300">Books</a></li>
+                        <li><a href="cart.html" class="hover:text-white transition-colors duration-300">Shopping Cart</a></li>
                     </ul>
                 </div>
                 
-                <div>
+                <div class="fade-in">
                     <h4 class="font-semibold mb-4">Support</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Shipping Info</a></li>
                     </ul>
                 </div>
                 
-                <div>
+                <div class="fade-in">
                     <h4 class="font-semibold mb-4">Contact Info</h4>
                     <div class="text-gray-400 space-y-2">
                         <p><i class="fas fa-university mr-2"></i>University of Port Harcourt</p>
                         <p><i class="fas fa-map-marker-alt mr-2"></i>Choba, Rivers State</p>
                         <p><i class="fas fa-envelope mr-2"></i>bookstore@uniport.edu.ng</p>
+                        <p><i class="fas fa-phone mr-2"></i>+234 (0) 123 456 7890</p>
                     </div>
                 </div>
             </div>
             
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 fade-in">
                 <p>&copy; 2025 UNIPORT Bookstore. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="js/main.js"></script>
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+                
+                // Change icon based on menu state
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Fade in elements on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Check on load
+            fadeInOnScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // Sticky header effect
+            const header = document.querySelector('.sticky-header');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Add to cart functionality (basic example)
+            const addToCartButtons = document.querySelectorAll('.bg-primary');
+            const cartCount = document.getElementById('cartCount');
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            let cartItems = 0;
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    cartItems++;
+                    cartCount.textContent = cartItems;
+                    mobileCartCount.textContent = cartItems;
+                    
+                    // Show cart count badges
+                    cartCount.style.display = 'flex';
+                    mobileCartCount.style.display = 'flex';
+                    
+                    // Add animation to cart icon
+                    cartCount.classList.add('animate-pulse');
+                    setTimeout(() => {
+                        cartCount.classList.remove('animate-pulse');
+                    }, 500);
+                });
+            });
+            
+            // Auth section placeholder
+            const authSection = document.getElementById('authSection');
+            const mobileAuthSection = document.getElementById('mobileAuthSection');
+            
+            authSection.innerHTML = `
+                <a href="login.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Login</a>
+                <span class="text-gray-400 mx-2">|</span>
+                <a href="register.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Register</a>
+            `;
+            
+            mobileAuthSection.innerHTML = `
+                <a href="login.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Login</a>
+                <a href="register.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Register</a>
+            `;
+        });
+    </script>
 </body>
 </html>

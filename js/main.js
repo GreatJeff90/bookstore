@@ -119,17 +119,17 @@ function requireAuth() {
 }
 
 // Protect admin routes
-function requireAdmin() {
-    const user = getCurrentUser();
-    if (!user || !user.loggedIn || user.role !== 'admin') {
-        showToast('Admin access required', 'error');
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 1500);
-        return false;
-    }
-    return true;
-}
+// function requireAdmin() {
+//     const user = getCurrentUser();
+//     if (!user || !user.loggedIn || user.role !== 'admin') {
+//         showToast('Admin access required', 'error');
+//         setTimeout(() => {
+//             window.location.href = 'login.html';
+//         }, 1500);
+//         return false;
+//     }
+//     return true;
+// }
 
 // Toast notification system
 function showToast(message, type = 'info') {

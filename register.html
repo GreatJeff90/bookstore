@@ -24,7 +24,7 @@
         <!-- Header -->
         <div class="text-center">
             <div class="mx-auto h-12 w-12 rounded-lg flex items-center justify-center">
-                                        <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
+                <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
             </div>
             <h2 class="mt-6 text-3xl font-bold text-gray-900">
                 Create your account
@@ -214,173 +214,161 @@
     </div>
 
     <script>
-        // Update the script section in register.html
-function togglePassword(fieldId) {
-    const passwordInput = document.getElementById(fieldId);
-    const toggleIcon = document.getElementById(fieldId + 'Toggle');
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.className = 'fas fa-eye-slash text-gray-400';
-    } else {
-        passwordInput.type = 'password';
-        toggleIcon.className = 'fas fa-eye text-gray-400';
-    }
-}
-
-function handleRegistration(event) {
-    event.preventDefault();
-    
-    const fullName = document.getElementById('fullName').value;
-    const email = document.getElementById('email').value;
-    const role = document.getElementById('role').value;
-    const department = document.getElementById('department').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const terms = document.getElementById('terms').checked;
-    
-    // === ADD THIS ADMIN DETECTION CODE ===
-    // Automatically set admin role for specific emails
-    let userRole = role;
-    if (email === 'admin@uniport.edu.ng' || email.includes('admin')) {
-        userRole = 'admin';
-    }
-    // === END ADMIN DETECTION CODE ===
-    
-    // Validation
-    if (fullName.length < 2) {
-        showError('Please enter your full name');
-        return;
-    }
-    
-    if (!email.includes('@')) {
-        showError('Please enter a valid email address');
-        return;
-    }
-    
-    // Check if email is already registered
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    if (users.find(u => u.email === email)) {
-        showError('This email is already registered. Please login instead.');
-        return;
-    }
-    
-    if (password.length < 8) {
-        showError('Password must be at least 8 characters long');
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        showError('Passwords do not match');
-        return;
-    }
-    
-    if (!terms) {
-        showError('Please agree to the Terms and Conditions');
-        return;
-    }
-    
-    // Create user account - USE userRole instead of role
-    const user = {
-        id: Date.now(),
-        name: fullName,
-        email: email,
-        role: userRole, // This is the changed line
-        department: department,
-        password: password,
-        joined: new Date().toISOString(),
-        orders: []
-    };
-    
-    // Save user to users array
-    users.push(user);
-    localStorage.setItem('users', JSON.stringify(users));
-    
-    // Create user session
-    const userSession = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role, // This is the changed line
-        department: user.department,
-        loggedIn: true,
-        loginTime: new Date().toISOString()
-    };
-    
-    localStorage.setItem('currentUser', JSON.stringify(userSession));
-    
-    // Show success message
-    showSuccess('Registration successful! Welcome to UNIPORT Bookstore.');
-    
-    // Redirect based on role
-    setTimeout(() => {
-        if (userSession.role === 'admin') {
-            window.location.href = 'admin.html'; // Redirect admins to admin dashboard
-        } else {
-            window.location.href = 'index.html'; // Regular users go to home
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleIcon = document.getElementById(fieldId + 'Toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash text-gray-400';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye text-gray-400';
+            }
         }
-    }, 2000);
-}
-function showError(message) {
-    // Remove existing alerts
-    const existingAlert = document.querySelector('.alert-message');
-    if (existingAlert) {
-        existingAlert.remove();
-    }
-    
-    const alertHTML = `
-        <div class="alert-message bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center">
-            <i class="fas fa-exclamation-circle mr-2"></i>
-            ${message}
-        </div>
-    `;
-    
-    const form = document.querySelector('form');
-    form.insertAdjacentHTML('afterbegin', alertHTML);
-}
 
-function showSuccess(message) {
-    // Remove existing alerts
-    const existingAlert = document.querySelector('.alert-message');
-    if (existingAlert) {
-        existingAlert.remove();
-    }
-    
-    const alertHTML = `
-        <div class="alert-message bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-4 flex items-center">
-            <i class="fas fa-check-circle mr-2"></i>
-            ${message}
-        </div>
-    `;
-    
-    const form = document.querySelector('form');
-    form.insertAdjacentHTML('afterbegin', alertHTML);
-}
-
-// Check if user is already logged in
-document.addEventListener('DOMContentLoaded', function() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user && user.loggedIn) {
-        window.location.href = 'index.html';
-    }
-    
-    // Add form validation as user types
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('confirmPassword');
-    
-    confirmPassword.addEventListener('input', function() {
-        if (password.value !== confirmPassword.value) {
-            confirmPassword.classList.add('border-red-300');
-        } else {
-            confirmPassword.classList.remove('border-red-300');
+        function handleRegistration(event) {
+            event.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const role = document.getElementById('role').value;
+            const department = document.getElementById('department').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // Validation
+            if (fullName.length < 2) {
+                showError('Please enter your full name');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                showError('Please enter a valid email address');
+                return;
+            }
+            
+            // Check if email is already registered
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(u => u.email === email)) {
+                showError('This email is already registered. Please login instead.');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showError('Password must be at least 8 characters long');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+            
+            if (!terms) {
+                showError('Please agree to the Terms and Conditions');
+                return;
+            }
+            
+            // Create user account
+            const user = {
+                id: Date.now(),
+                name: fullName,
+                email: email,
+                role: role, // Use the selected role
+                department: department,
+                password: password,
+                joined: new Date().toISOString(),
+                orders: []
+            };
+            
+            // Save user to users array
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Create user session
+            const userSession = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                department: user.department,
+                loggedIn: true,
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(userSession));
+            
+            // Show success message
+            showSuccess('Registration successful! Welcome to UNIPORT Bookstore.');
+            
+            // Redirect to home page
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
         }
-    });
-});
 
-// Add this to every page
-document.addEventListener('DOMContentLoaded', function() {
-    updateNavigation();
-});
+        function showError(message) {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.alert-message');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alertHTML = `
+                <div class="alert-message bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            const form = document.querySelector('form');
+            form.insertAdjacentHTML('afterbegin', alertHTML);
+        }
+
+        function showSuccess(message) {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.alert-message');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alertHTML = `
+                <div class="alert-message bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-4 flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            const form = document.querySelector('form');
+            form.insertAdjacentHTML('afterbegin', alertHTML);
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user && user.loggedIn) {
+                window.location.href = 'index.html';
+            }
+            
+            // Add form validation as user types
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            confirmPassword.addEventListener('input', function() {
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.classList.add('border-red-300');
+                } else {
+                    confirmPassword.classList.remove('border-red-300');
+                }
+            });
+        });
+
+        // Add this to every page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+        });
     </script>
 </body>
 </html>
