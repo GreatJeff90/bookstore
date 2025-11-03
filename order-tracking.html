@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNIPORT Bookstore - My Orders</title>
+    <title>UNIPORT Bookstore - Order Tracking</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -97,6 +97,129 @@
         .status-badge {
             transition: all 0.3s ease;
         }
+        
+        .tracking-step {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .tracking-step:before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+        
+        .tracking-step:first-child:before {
+            top: 1.5rem;
+        }
+        
+        .tracking-step:last-child:before {
+            bottom: calc(100% - 1.5rem);
+        }
+        
+        .step-icon {
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        
+        .step-completed {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .step-current {
+            background-color: #3b82f6;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        .step-pending {
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #10b981;
+            transition: width 0.5s ease;
+        }
+        
+        .order-map {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ef4444;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .map-marker.start {
+            top: 30%;
+            left: 20%;
+            background-color: #10b981;
+        }
+        
+        .map-marker.end {
+            top: 70%;
+            left: 80%;
+            background-color: #3b82f6;
+        }
+        
+        .map-route {
+            position: absolute;
+            top: 35%;
+            left: 22%;
+            width: 56%;
+            height: 2px;
+            background-color: #3b82f6;
+            transform-origin: left center;
+        }
+        
+        .map-route:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid #3b82f6;
+            border-right: 2px solid #3b82f6;
+            transform: rotate(45deg);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -122,6 +245,9 @@
                         <i class="fas fa-shopping-cart"></i> Cart
                         <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
                     </a>
+                    <a href="orders.html" class="text-primary font-medium border-b-2 border-primary transition-colors duration-300">
+                        <i class="fas fa-shopping-bag"></i> Orders
+                    </a>
                     <div class="relative group" id="authSection">
                         <!-- This will be populated by JavaScript -->
                     </div>
@@ -142,6 +268,9 @@
                         <i class="fas fa-shopping-cart mr-2"></i>Cart
                         <span id="mobileCartCount" class="absolute -top-1 left-20 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300" style="display: none;">0</span>
                     </a>
+                    <a href="orders.html" class="block text-primary font-medium py-2 transition-colors duration-300">
+                        <i class="fas fa-shopping-bag mr-2"></i>Orders
+                    </a>
                     <div id="mobileAuthSection" class="pt-2 border-t">
                         <!-- This will be populated by JavaScript -->
                     </div>
@@ -151,70 +280,151 @@
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Page Header -->
-        <div class="mb-8 fade-in">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2 transition-all duration-500">My Orders</h1>
-            <p class="text-gray-600 transition-all duration-500 delay-100">View and manage your UNIPORT Bookstore orders</p>
+        <!-- Back Button -->
+        <div class="mb-6 fade-in">
+            <a href="orders.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Orders
+            </a>
         </div>
 
-        <!-- Filters and Search -->
+        <!-- Page Header -->
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 transition-all duration-500">Order Tracking</h1>
+            <p class="text-gray-600 transition-all duration-500 delay-100">Track your UNIPORT Bookstore order in real-time</p>
+        </div>
+
+        <!-- Order Summary Card -->
         <div class="bg-white rounded-lg shadow-sm border p-6 mb-8 hover-lift transition-all duration-300 fade-in">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="md:col-span-2">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
-                        </div>
-                        <input 
-                            type="text" 
-                            id="searchOrders"
-                            placeholder="Search by order ID, book title, or department..."
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                        >
-                    </div>
-                </div>
-                
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
-                    <select id="statusFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
-                        <option value="">All Status</option>
-                        <option value="processing">Processing</option>
-                        <option value="shipped">Shipped</option>
-                        <option value="out-for-delivery">Out for Delivery</option>
-                        <option value="delivered">Delivered</option>
-                    </select>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Order ID</h3>
+                    <p class="text-lg font-semibold text-gray-900" id="orderIdDisplay">-</p>
                 </div>
-                
                 <div>
-                    <select id="timeFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
-                        <option value="">All Time</option>
-                        <option value="last-30-days">Last 30 Days</option>
-                        <option value="last-3-months">Last 3 Months</option>
-                        <option value="last-6-months">Last 6 Months</option>
-                        <option value="last-year">Last Year</option>
-                    </select>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Order Date</h3>
+                    <p class="text-lg font-semibold text-gray-900" id="orderDateDisplay">-</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Total Amount</h3>
+                    <p class="text-lg font-semibold text-gray-900" id="orderTotalDisplay">-</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Status</h3>
+                    <p class="text-lg font-semibold" id="orderStatusDisplay">-</p>
                 </div>
             </div>
         </div>
 
-        <!-- Orders List -->
-        <div id="ordersList" class="space-y-6">
-            <!-- Orders will be dynamically loaded here -->
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Order Details & Tracking -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Order Tracking Progress -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 hover-lift transition-all duration-300 fade-in">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Order Tracking</h2>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mb-8">
+                        <div class="flex justify-between text-sm text-gray-600 mb-2">
+                            <span>Order Placed</span>
+                            <span id="progressPercentage">0%</span>
+                            <span>Delivered</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tracking Steps -->
+                    <div class="space-y-6" id="trackingSteps">
+                        <!-- Steps will be populated dynamically -->
+                    </div>
+                </div>
 
-        <!-- Empty State -->
-        <div id="emptyOrders" class="text-center py-16 fade-in hidden">
-            <i class="fas fa-shopping-bag text-gray-400 text-6xl mb-4 empty-orders-icon"></i>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">No orders found</h3>
-            <p class="text-gray-600 mb-6">You haven't placed any orders yet</p>
-            <a href="books.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300 inline-flex items-center hover-lift">
-                <i class="fas fa-book mr-2"></i> Start Shopping
-            </a>
-        </div>
+                <!-- Order Items -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 hover-lift transition-all duration-300 fade-in">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Order Items</h2>
+                    
+                    <div class="space-y-4" id="orderItemsList">
+                        <!-- Items will be populated dynamically -->
+                    </div>
+                    
+                    <!-- Order Summary -->
+                    <div class="border-t pt-6 mt-6">
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Subtotal</span>
+                                <span id="orderSubtotal">₦0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Shipping</span>
+                                <span id="orderShipping">₦500</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Tax</span>
+                                <span id="orderTax">₦0</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-semibold border-t pt-2">
+                                <span>Total</span>
+                                <span id="orderTotal">₦0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Loading State -->
-        <div id="loadingOrders" class="text-center py-12 fade-in">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-            <p class="mt-4 text-gray-600">Loading your orders...</p>
+            <!-- Right Column - Delivery Information & Actions -->
+            <div class="space-y-8">
+                <!-- Delivery Information -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 hover-lift transition-all duration-300 fade-in">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Delivery Information</h2>
+                    
+                    <div class="space-y-4" id="deliveryInfo">
+                        <!-- Delivery info will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Delivery Map -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 hover-lift transition-all duration-300 fade-in">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Delivery Route</h2>
+                    
+                    <div class="order-map mb-4">
+                        <div class="map-marker start"></div>
+                        <div class="map-marker end"></div>
+                        <div class="map-route" id="deliveryRoute"></div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600" id="deliveryEstimate">Estimated delivery: Calculating...</p>
+                    </div>
+                </div>
+
+                <!-- Order Actions -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 hover-lift transition-all duration-300 fade-in">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Order Actions</h2>
+                    
+                    <div class="space-y-3">
+                        <button onclick="downloadInvoice()" class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center">
+                            <i class="fas fa-file-invoice mr-2"></i> Download Invoice
+                        </button>
+                        <button onclick="contactSupport()" class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center">
+                            <i class="fas fa-headset mr-2"></i> Contact Support
+                        </button>
+                        <button onclick="reorderItems()" id="reorderBtn" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center">
+                            <i class="fas fa-redo mr-2"></i> Reorder Items
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Support Information -->
+                <div class="bg-blue-50 rounded-lg border border-blue-200 p-6 fade-in">
+                    <h3 class="font-semibold text-blue-900 mb-2">Need Help?</h3>
+                    <div class="text-sm text-blue-700 space-y-1">
+                        <p><i class="fas fa-phone mr-2"></i> 0800-UNIPORT</p>
+                        <p><i class="fas fa-envelope mr-2"></i> bookstore@uniport.edu.ng</p>
+                        <p><i class="fas fa-clock mr-2"></i> Mon-Fri: 8AM - 5PM</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -276,113 +486,161 @@
     </footer>
 
     <script>
-        // Load and display orders
-        function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
-            const ordersList = document.getElementById('ordersList');
-            const emptyOrders = document.getElementById('emptyOrders');
-            const loadingOrders = document.getElementById('loadingOrders');
-            
-            // Hide loading
-            loadingOrders.classList.add('hidden');
-            
-            if (orders.length === 0) {
-                emptyOrders.classList.remove('hidden');
-                ordersList.innerHTML = '';
+        // Get order ID from URL parameters
+        function getOrderIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('order');
+        }
+
+        // Load and display order details
+        function loadOrderDetails() {
+            const orderId = getOrderIdFromUrl();
+            if (!orderId) {
+                showError('No order ID provided');
                 return;
             }
+
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const order = orders.find(o => o.id === orderId);
+
+            if (!order) {
+                showError('Order not found');
+                return;
+            }
+
+            // Update order summary
+            document.getElementById('orderIdDisplay').textContent = order.id;
+            document.getElementById('orderDateDisplay').textContent = formatDate(order.date);
+            document.getElementById('orderTotalDisplay').textContent = `₦${order.total.toLocaleString()}`;
             
-            emptyOrders.classList.add('hidden');
+            // Update order status with appropriate styling
+            const statusElement = document.getElementById('orderStatusDisplay');
+            statusElement.textContent = getStatusText(order.status);
+            statusElement.className = `text-lg font-semibold ${getStatusColor(order.status)}`;
+
+            // Update order items
+            renderOrderItems(order.items);
             
-            // Sort orders by date (newest first)
-            const sortedOrders = orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            // Update order summary
+            document.getElementById('orderSubtotal').textContent = `₦${order.subtotal.toLocaleString()}`;
+            document.getElementById('orderShipping').textContent = `₦${order.shipping.toLocaleString()}`;
+            document.getElementById('orderTax').textContent = `₦${order.tax.toLocaleString()}`;
+            document.getElementById('orderTotal').textContent = `₦${order.total.toLocaleString()}`;
+
+            // Update delivery information
+            renderDeliveryInfo(order.shippingInfo);
             
-            ordersList.innerHTML = sortedOrders.map(order => `
-                <div class="bg-white rounded-lg shadow-sm border hover-lift transition-all duration-300 fade-in order-card" data-order-id="${order.id}">
-                    <div class="p-6">
-                        <!-- Order Header -->
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900">Order #${order.id}</h3>
-                                <p class="text-gray-600">Placed on ${formatDate(order.date)}</p>
-                            </div>
-                            <div class="mt-2 md:mt-0 flex items-center space-x-4">
-                                <span class="status-badge px-3 py-1 rounded-full text-sm font-medium ${getStatusClass(order.status)}">
-                                    ${getStatusText(order.status)}
-                                </span>
-                                <span class="text-lg font-semibold text-gray-900">₦${order.total.toLocaleString()}</span>
-                            </div>
+            // Update tracking progress
+            renderTrackingProgress(order.tracking);
+            
+            // Update delivery estimate
+            document.getElementById('deliveryEstimate').textContent = `Estimated delivery: ${formatDate(order.delivery.estimated)}`;
+            
+            // Update delivery route animation based on status
+            updateDeliveryRoute(order.status);
+            
+            // Show/hide reorder button based on status
+            const reorderBtn = document.getElementById('reorderBtn');
+            if (order.status === 'delivered') {
+                reorderBtn.classList.remove('hidden');
+            } else {
+                reorderBtn.classList.add('hidden');
+            }
+        }
+
+        function renderOrderItems(items) {
+            const container = document.getElementById('orderItemsList');
+            container.innerHTML = items.map(item => `
+                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex-shrink-0">
+                        <div class="bg-gray-200 w-16 h-20 rounded flex items-center justify-center">
+                            <i class="fas fa-book text-gray-400 text-xl"></i>
                         </div>
-                        
-                        <!-- Order Items Preview -->
-                        <div class="mb-4">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="text-sm text-gray-600">${order.items.length} item${order.items.length > 1 ? 's' : ''}</span>
-                                <span class="text-gray-300">•</span>
-                                <span class="text-sm text-gray-600">Delivery to: ${order.shippingInfo.department}</span>
-                            </div>
-                            <div class="flex space-x-2">
-                                ${order.items.slice(0, 3).map(item => `
-                                    <div class="flex items-center space-x-2 bg-gray-50 rounded-lg px-3 py-2">
-                                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center">
-                                            <i class="fas fa-book text-gray-400 text-xs"></i>
-                                        </div>
-                                        <span class="text-sm text-gray-700">${item.title}</span>
-                                        ${item.quantity > 1 ? `<span class="text-xs text-gray-500">x${item.quantity}</span>` : ''}
-                                    </div>
-                                `).join('')}
-                                ${order.items.length > 3 ? `
-                                    <div class="flex items-center space-x-2 bg-gray-50 rounded-lg px-3 py-2">
-                                        <span class="text-sm text-gray-700">+${order.items.length - 3} more</span>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                        
-                        <!-- Order Actions -->
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t">
-                            <div class="mb-3 sm:mb-0">
-                                <span class="text-sm text-gray-600">
-                                    Estimated delivery: ${formatDate(order.delivery.estimated)}
-                                </span>
-                            </div>
-                            <div class="flex space-x-3">
-                                <button onclick="viewOrderDetails('${order.id}')" class="text-primary hover:text-primary/80 font-medium transition-colors duration-300 flex items-center">
-                                    <i class="fas fa-eye mr-2"></i> View Details
-                                </button>
-                                <button onclick="trackOrder('${order.id}')" class="text-primary hover:text-primary/80 font-medium transition-colors duration-300 flex items-center">
-                                    <i class="fas fa-shipping-fast mr-2"></i> Track Order
-                                </button>
-                                ${order.status === 'delivered' ? `
-                                    <button onclick="reorder('${order.id}')" class="text-secondary hover:text-secondary/80 font-medium transition-colors duration-300 flex items-center">
-                                        <i class="fas fa-redo mr-2"></i> Reorder
-                                    </button>
-                                ` : ''}
-                            </div>
-                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-900">${item.title}</h4>
+                        <p class="text-gray-600 text-sm">Quantity: ${item.quantity}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-semibold text-gray-900">₦${(item.price * item.quantity).toLocaleString()}</p>
+                        <p class="text-gray-600 text-sm">₦${item.price.toLocaleString()} each</p>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function renderDeliveryInfo(shippingInfo) {
+            const container = document.getElementById('deliveryInfo');
+            container.innerHTML = `
+                <div>
+                    <h3 class="font-medium text-gray-700 mb-1">Recipient</h3>
+                    <p class="text-gray-900">${shippingInfo.firstName} ${shippingInfo.lastName}</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-700 mb-1">Contact</h3>
+                    <p class="text-gray-900">${shippingInfo.phone}</p>
+                    <p class="text-gray-600 text-sm">${shippingInfo.email}</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-700 mb-1">Delivery Address</h3>
+                    <p class="text-gray-900">${shippingInfo.address}</p>
+                    <p class="text-gray-600 text-sm">${shippingInfo.department}${shippingInfo.room ? `, Room ${shippingInfo.room}` : ''}</p>
+                </div>
+            `;
+        }
+
+        function renderTrackingProgress(tracking) {
+            const container = document.getElementById('trackingSteps');
+            const steps = tracking.steps;
             
-            // Trigger fade-in animation
-            setTimeout(() => {
-                const orderCards = document.querySelectorAll('.order-card');
-                orderCards.forEach(card => {
-                    card.classList.add('visible');
-                });
-            }, 100);
+            // Calculate progress percentage
+            const completedSteps = steps.filter(step => step.completed).length;
+            const totalSteps = steps.length;
+            const progressPercentage = Math.round((completedSteps / totalSteps) * 100);
+            
+            // Update progress bar
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+            
+            // Render tracking steps
+            container.innerHTML = steps.map((step, index) => {
+                let stepClass = 'step-pending';
+                let icon = 'fa-circle';
+                
+                if (step.completed) {
+                    stepClass = 'step-completed';
+                    icon = 'fa-check';
+                } else if (index === completedSteps) {
+                    stepClass = 'step-current';
+                    icon = 'fa-spinner fa-spin';
+                }
+                
+                return `
+                    <div class="tracking-step">
+                        <div class="step-icon ${stepClass}">
+                            <i class="fas ${icon} text-xs"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">${getStepTitle(step.name)}</h4>
+                            <p class="text-gray-600 text-sm">${step.date ? formatDateTime(step.date) : 'Pending'}</p>
+                            ${step.description ? `<p class="text-gray-500 text-sm mt-1">${step.description}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
-        
-        function getStatusClass(status) {
-            switch(status) {
-                case 'processing': return 'bg-yellow-100 text-yellow-800';
-                case 'shipped': return 'bg-blue-100 text-blue-800';
-                case 'out-for-delivery': return 'bg-purple-100 text-purple-800';
-                case 'delivered': return 'bg-green-100 text-green-800';
-                default: return 'bg-gray-100 text-gray-800';
-            }
+
+        function getStepTitle(stepName) {
+            const titles = {
+                'order_placed': 'Order Placed',
+                'processing': 'Processing Order',
+                'shipped': 'Shipped from Warehouse',
+                'out_for_delivery': 'Out for Delivery',
+                'delivered': 'Delivered'
+            };
+            return titles[stepName] || stepName;
         }
-        
+
         function getStatusText(status) {
             switch(status) {
                 case 'processing': return 'Processing';
@@ -392,25 +650,71 @@
                 default: return 'Unknown';
             }
         }
-        
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'processing': return 'text-yellow-600';
+                case 'shipped': return 'text-blue-600';
+                case 'out-for-delivery': return 'text-purple-600';
+                case 'delivered': return 'text-green-600';
+                default: return 'text-gray-600';
+            }
+        }
+
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', {
                 year: 'numeric',
-                month: 'short',
+                month: 'long',
                 day: 'numeric'
             });
         }
-        
-        function viewOrderDetails(orderId) {
-            window.location.href = `order-tracking.html?order=${orderId}`;
+
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
-        
-        function trackOrder(orderId) {
-            window.location.href = `order-tracking.html?order=${orderId}`;
+
+        function updateDeliveryRoute(status) {
+            const route = document.getElementById('deliveryRoute');
+            let width = 0;
+            
+            switch(status) {
+                case 'processing':
+                    width = 10;
+                    break;
+                case 'shipped':
+                    width = 40;
+                    break;
+                case 'out-for-delivery':
+                    width = 70;
+                    break;
+                case 'delivered':
+                    width = 100;
+                    break;
+                default:
+                    width = 0;
+            }
+            
+            route.style.width = `${width}%`;
         }
-        
-        function reorder(orderId) {
+
+        function downloadInvoice() {
+            showToast('Invoice download will be available soon', 'info');
+        }
+
+        function contactSupport() {
+            window.location.href = 'mailto:bookstore@uniport.edu.ng?subject=Order Support - ' + getOrderIdFromUrl();
+        }
+
+        function reorderItems() {
+            const orderId = getOrderIdFromUrl();
             const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
             const order = orders.find(o => o.id === orderId);
             
@@ -439,79 +743,128 @@
                 window.location.href = 'cart.html';
             }, 1500);
         }
-        
-        function filterOrders() {
-            const searchTerm = document.getElementById('searchOrders').value.toLowerCase();
-            const statusFilter = document.getElementById('statusFilter').value;
-            const timeFilter = document.getElementById('timeFilter').value;
+
+        function showError(message) {
+            const ordersList = document.getElementById('ordersList');
+            ordersList.innerHTML = `
+                <div class="text-center py-16">
+                    <i class="fas fa-exclamation-triangle text-gray-400 text-6xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">${message}</h3>
+                    <p class="text-gray-600 mb-6">Please check the order ID and try again</p>
+                    <a href="orders.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300 inline-flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Orders
+                    </a>
+                </div>
+            `;
+        }
+
+        function showToast(message, type = 'info') {
+            // Simple implementation - you can enhance this with a proper toast library
+            alert(`${type.toUpperCase()}: ${message}`);
+        }
+
+        function updateNavigation() {
+            const authSection = document.getElementById('authSection');
+            const mobileAuthSection = document.getElementById('mobileAuthSection');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             
-            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
-            let filteredOrders = orders;
-            
-            // Apply search filter
-            if (searchTerm) {
-                filteredOrders = filteredOrders.filter(order => 
-                    order.id.toLowerCase().includes(searchTerm) ||
-                    order.items.some(item => item.title.toLowerCase().includes(searchTerm)) ||
-                    order.shippingInfo.department.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            // Apply status filter
-            if (statusFilter) {
-                filteredOrders = filteredOrders.filter(order => order.status === statusFilter);
-            }
-            
-            // Apply time filter
-            if (timeFilter) {
-                const now = new Date();
-                let cutoffDate;
+            if (currentUser) {
+                authSection.innerHTML = `
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors duration-300">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="hidden md:block font-medium">${currentUser.name || 'Profile'}</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-user-circle mr-2"></i>My Profile
+                            </a>
+                            <a href="orders.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                            </a>
+                            <div class="border-t my-1"></div>
+                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                `;
                 
-                switch(timeFilter) {
-                    case 'last-30-days':
-                        cutoffDate = new Date(now.setDate(now.getDate() - 30));
-                        break;
-                    case 'last-3-months':
-                        cutoffDate = new Date(now.setMonth(now.getMonth() - 3));
-                        break;
-                    case 'last-6-months':
-                        cutoffDate = new Date(now.setMonth(now.getMonth() - 6));
-                        break;
-                    case 'last-year':
-                        cutoffDate = new Date(now.setFullYear(now.getFullYear() - 1));
-                        break;
-                }
-                
-                filteredOrders = filteredOrders.filter(order => new Date(order.date) >= cutoffDate);
-            }
-            
-            // Update display
-            if (filteredOrders.length === 0) {
-                document.getElementById('emptyOrders').classList.remove('hidden');
-                document.getElementById('ordersList').innerHTML = '';
+                mobileAuthSection.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">${currentUser.name || 'User'}</p>
+                                <p class="text-sm text-gray-600">${currentUser.email || ''}</p>
+                            </div>
+                        </div>
+                        <a href="profile.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-user-circle mr-2"></i>My Profile
+                        </a>
+                        <a href="orders.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <button onclick="logout()" class="w-full text-left text-red-600 hover:text-red-800 font-medium py-2 transition-colors duration-300">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                `;
             } else {
-                document.getElementById('emptyOrders').classList.add('hidden');
-                // Re-render with filtered orders
-                const tempOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
-                localStorage.setItem('tempFilteredOrders', JSON.stringify(filteredOrders));
-                loadOrders();
-                localStorage.setItem('userOrders', JSON.stringify(tempOrders)); // Restore original
+                authSection.innerHTML = `
+                    <a href="login.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Login</a>
+                    <span class="text-gray-400 mx-2">|</span>
+                    <a href="register.html" class="text-gray-700 hover:text-primary font-medium transition-colors duration-300">Register</a>
+                `;
+                
+                mobileAuthSection.innerHTML = `
+                    <a href="login.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Login</a>
+                    <a href="register.html" class="block text-gray-700 hover:text-primary font-medium py-2 transition-colors duration-300">Register</a>
+                `;
             }
         }
 
-        // Include the updateNavigation, updateCartCount, showToast functions from previous examples
-        // ... (copy the same functions from order-tracking.html)
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            const cartCount = document.getElementById('cartCount');
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                mobileCartCount.textContent = totalItems;
+                cartCount.style.display = 'flex';
+                mobileCartCount.style.display = 'flex';
+            } else {
+                cartCount.style.display = 'none';
+                mobileCartCount.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                updateNavigation();
+                showToast('You have been logged out successfully', 'success');
+                
+                // Redirect to home page after logout
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        }
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            loadOrders();
+            loadOrderDetails();
             updateNavigation();
             updateCartCount();
-            
-            // Event listeners for filters
-            document.getElementById('searchOrders').addEventListener('input', filterOrders);
-            document.getElementById('statusFilter').addEventListener('change', filterOrders);
-            document.getElementById('timeFilter').addEventListener('change', filterOrders);
             
             // Fade in elements on scroll
             const fadeElements = document.querySelectorAll('.fade-in');

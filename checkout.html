@@ -18,6 +18,165 @@
             }
         }
     </script>
+    <style>
+        /* Custom styles for better mobile experience */
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 1024px) {
+            .checkout-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        .mobile-steps {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .mobile-steps::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .step-item {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            margin-right: 1rem;
+        }
+        
+        .step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-active {
+            background-color: #0000ff;
+            color: white;
+        }
+        
+        .step-inactive {
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .step-label {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        
+        .form-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #0000ff;
+            border-color: #0000ff;
+        }
+        
+        .payment-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .payment-option.selected {
+            border-color: #0000ff;
+            background-color: #f0f4ff;
+        }
+        
+        .order-summary {
+            position: sticky;
+            top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .order-summary {
+                position: static;
+            }
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0000ff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #dcfce7;
+        }
+        
+        .success-checkmark i {
+            font-size: 2rem;
+            color: #16a34a;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background-color: #16a34a;
+        }
+        
+        .toast.error {
+            background-color: #dc2626;
+        }
+        
+        .toast.info {
+            background-color: #2563eb;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation Header -->
@@ -27,14 +186,14 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <div class="text-white p-2 rounded-lg">
-                                               <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
+                        <img src="https://www.uniport.edu.ng/wp-content/themes/unipix/assets/images/logo/uniport_logo1.png" alt="UNIPORT Logo" class="h-8 w-8 object-contain">
                     </div>
                     <span class="ml-2 text-xl font-bold text-gray-900">
                         UNIPORT Bookstore
                     </span>
                 </div>
 
-                <!-- Checkout Steps -->
+                <!-- Desktop Checkout Steps -->
                 <div class="hidden md:flex items-center space-x-4">
                     <div class="flex items-center text-primary">
                         <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm">1</div>
@@ -54,8 +213,28 @@
                     </div>
                 </div>
 
+                <!-- Mobile Checkout Steps -->
+                <div class="md:hidden mobile-steps">
+                    <div class="step-item">
+                        <div class="step-number step-active">1</div>
+                        <span class="step-label">Cart</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number step-active">2</div>
+                        <span class="step-label">Info</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number step-active">3</div>
+                        <span class="step-label">Payment</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number step-inactive">4</div>
+                        <span class="step-label">Confirm</span>
+                    </div>
+                </div>
+
                 <!-- Support -->
-                <div class="text-sm text-gray-600">
+                <div class="hidden md:block text-sm text-gray-600">
                     <i class="fas fa-phone mr-1"></i> Support: 0800-UNIPORT
                 </div>
             </div>
@@ -63,89 +242,89 @@
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="checkout-grid">
             <!-- Left Column - Checkout Forms -->
             <div>
                 <!-- Shipping Information -->
-                <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mb-6">
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">Shipping Information</h2>
                     
                     <form id="shippingForm">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                                <input type="text" name="firstName" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <input type="text" name="firstName" required class="form-input">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                                <input type="text" name="lastName" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <input type="text" name="lastName" required class="form-input">
                             </div>
                         </div>
 
                         <div class="mt-4">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                            <input type="email" name="email" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="student@uniport.edu.ng">
+                            <input type="email" name="email" required class="form-input" placeholder="student@uniport.edu.ng">
                         </div>
 
                         <div class="mt-4">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                            <input type="tel" name="phone" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="0800 000 0000">
+                            <input type="tel" name="phone" required class="form-input" placeholder="0800 000 0000">
                         </div>
 
                         <div class="mt-4">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Delivery Address *</label>
-                            <textarea name="address" required rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="e.g., Faculty of Science Building, Room 101"></textarea>
+                            <textarea name="address" required rows="3" class="form-input" placeholder="e.g., Faculty of Science Building, Room 101"></textarea>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Department/Faculty *</label>
-                                <input type="text" name="department" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <input type="text" name="department" required class="form-input">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Office/Room No.</label>
-                                <input type="text" name="room" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <input type="text" name="room" class="form-input">
                             </div>
                         </div>
                     </form>
                 </div>
 
                 <!-- Payment Method -->
-                <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">Payment Method</h2>
                     
                     <div class="space-y-4">
                         <!-- Paystack Option -->
-                        <div class="border-2 border-primary rounded-lg p-4">
+                        <div class="payment-option selected" id="paystackOption">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center mr-3">
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </div>
-                                    <div class="ml-3">
+                                    <div>
                                         <span class="font-semibold text-gray-900">Pay with Paystack</span>
                                         <p class="text-sm text-gray-600">Secure payment with card, bank transfer, or USSD</p>
                                     </div>
                                 </div>
-                                <img src="https://paystack.com/assets/img/blog/press/paystack-200px.png" alt="Paystack" class="h-8">
+                                <img src="https://paystack.com/assets/img/blog/press/paystack-200px.png" alt="Paystack" class="h-8 hidden sm:block">
                             </div>
                         </div>
 
                         <!-- Card Details (Mock) -->
                         <div id="paystackDetails" class="mt-4 p-4 bg-gray-50 rounded-lg">
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
-                                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="1234 5678 9012 3456" value="4084 0858 0231 7769" readonly>
+                                    <input type="text" class="form-input" placeholder="1234 5678 9012 3456" value="4084 0858 0231 7769" readonly>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
-                                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="MM/YY" value="12/25" readonly>
+                                    <input type="text" class="form-input" placeholder="MM/YY" value="12/25" readonly>
                                 </div>
                             </div>
                             <div class="mt-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
-                                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 max-w-20" placeholder="123" value="408" readonly>
+                                <input type="text" class="form-input max-w-32" placeholder="123" value="408" readonly>
                             </div>
                             <p class="text-xs text-gray-500 mt-2">* This is a demo. In production, Paystack would handle card processing securely.</p>
                         </div>
@@ -172,11 +351,11 @@
 
             <!-- Right Column - Order Summary -->
             <div>
-                <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
+                <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6 order-summary">
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">Order Summary</h2>
                     
                     <!-- Order Items -->
-                    <div id="checkoutItems" class="space-y-4 mb-6">
+                    <div id="checkoutItems" class="space-y-4 mb-6 max-h-80 overflow-y-auto">
                         <!-- Items will be loaded here -->
                     </div>
 
@@ -227,7 +406,7 @@
     <!-- Payment Processing Modal -->
     <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 text-center">
-            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+            <div class="loading-spinner"></div>
             <h3 class="text-xl font-semibold text-gray-900 mb-2" id="processingText">Initializing payment with Paystack...</h3>
             <p class="text-gray-600 mb-4">Please wait while we process your payment</p>
             <div class="bg-gray-100 p-3 rounded-lg">
@@ -237,12 +416,98 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 mt-12">
-        <!-- Same footer as index.html -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">UNIPORT Bookstore</h3>
+                    <p class="text-gray-400">
+                        Your trusted source for academic materials and textbooks at University of Port Harcourt.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="books.html" class="hover:text-white transition-colors duration-300">Books</a></li>
+                        <li><a href="cart.html" class="hover:text-white transition-colors duration-300">Shopping Cart</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Shipping Info</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <div class="text-gray-400 space-y-2">
+                        <p><i class="fas fa-university mr-2"></i>University of Port Harcourt</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Choba, Rivers State</p>
+                        <p><i class="fas fa-envelope mr-2"></i>bookstore@uniport.edu.ng</p>
+                        <p><i class="fas fa-phone mr-2"></i>+234 (0) 123 456 7890</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 UNIPORT Bookstore. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/main.js"></script>
     <script>
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            // Remove existing toasts
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
         function loadCheckoutData() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const checkoutItems = document.getElementById('checkoutItems');
@@ -263,11 +528,11 @@
                     <div class="bg-gray-200 w-12 h-16 rounded flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-book text-gray-400"></i>
                     </div>
-                    <div class="flex-1">
-                        <h4 class="font-medium text-gray-900 text-sm">${item.title}</h4>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-medium text-gray-900 text-sm truncate">${item.title}</h4>
                         <p class="text-gray-600 text-xs">Qty: ${item.quantity}</p>
                     </div>
-                    <div class="text-right">
+                    <div class="text-right flex-shrink-0">
                         <p class="font-semibold text-gray-900">₦${(item.price * item.quantity).toLocaleString()}</p>
                     </div>
                 </div>
@@ -288,9 +553,9 @@
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     isValid = false;
-                    field.classList.add('border-red-300');
+                    field.classList.add('border-red-500');
                 } else {
-                    field.classList.remove('border-red-300');
+                    field.classList.remove('border-red-500');
                 }
             });
 
@@ -298,23 +563,34 @@
             const emailField = form.querySelector('input[type="email"]');
             if (emailField.value && !emailField.value.includes('@')) {
                 isValid = false;
-                emailField.classList.add('border-red-300');
+                emailField.classList.add('border-red-500');
             }
 
             return isValid;
         }
 
+        function validateCardDetails() {
+            // Since this is a demo with mock card data, return true
+            // In production, you'd validate real card details here
+            return true;
+        }
+
         function processPayment() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) {
-                alert('Your cart is empty. Please add some books before checking out.');
-                window.location.href = 'books.html';
+                showToast('Your cart is empty. Please add some books before checking out.', 'error');
                 return;
             }
 
             // Validate shipping form
             if (!validateForm()) {
-                alert('Please fill in all required shipping information correctly.');
+                showToast('Please fill in all required shipping information correctly.', 'error');
+                return;
+            }
+            
+            // Validate card details
+            if (!validateCardDetails()) {
+                showToast('Please check your card details.', 'error');
                 return;
             }
 
@@ -335,10 +611,51 @@
             const processingText = document.getElementById('processingText');
             modal.classList.remove('hidden');
             
-            // Generate order details
-            const orderId = 'UNIPORT-' + Date.now();
-            const total = document.getElementById('checkoutTotal').textContent;
-            const subtotal = document.getElementById('checkoutSubtotal').textContent;
+            // Generate unique order ID
+            const orderId = generateOrderId();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 500;
+            const tax = Math.round(subtotal * 0.075);
+            const total = subtotal + shipping + tax;
+            
+            // Create comprehensive order record
+            const order = {
+                id: orderId,
+                date: new Date().toISOString(),
+                items: [...cart], // Copy cart items
+                subtotal: subtotal,
+                shipping: shipping,
+                tax: tax,
+                total: total,
+                status: 'processing',
+                progress: 25,
+                shippingInfo: shippingInfo,
+                payment: {
+                    method: 'paystack',
+                    reference: document.getElementById('transactionRef').textContent,
+                    status: 'completed',
+                    timestamp: new Date().toISOString()
+                },
+                delivery: {
+                    estimated: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+                    status: 'processing'
+                },
+                tracking: {
+                    steps: [
+                        { name: 'order_placed', completed: true, date: new Date().toISOString() },
+                        { name: 'processing', completed: true, date: new Date().toISOString() },
+                        { name: 'shipped', completed: false, date: null },
+                        { name: 'out_for_delivery', completed: false, date: null },
+                        { name: 'delivered', completed: false, date: null }
+                    ]
+                }
+            };
+            
+            // Save order to localStorage
+            saveOrder(order);
+            
+            // Clear cart
+            localStorage.removeItem('cart');
             
             // Simulate payment processing steps
             const processSteps = [
@@ -358,61 +675,40 @@
                 } else {
                     clearInterval(processInterval);
                     
-                    // Create comprehensive order record
-                    const order = {
-                        id: orderId,
-                        date: new Date().toISOString(),
-                        items: JSON.parse(localStorage.getItem('cart')) || [],
-                        subtotal: subtotal,
-                        shipping: 500,
-                        tax: document.getElementById('checkoutTax').textContent,
-                        total: total,
-                        status: 'confirmed',
-                        shippingInfo: shippingInfo,
-                        payment: {
-                            method: 'paystack',
-                            reference: document.getElementById('transactionRef').textContent,
-                            status: 'completed',
-                            timestamp: new Date().toISOString()
-                        },
-                        delivery: {
-                            estimated: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // 48 hours from now
-                            status: 'processing'
-                        }
-                    };
-                    
-                    // Save order to localStorage
-                    const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
-                    orders.push(order);
-                    localStorage.setItem('userOrders', JSON.stringify(orders));
-                    
-                    // Clear cart
-                    localStorage.removeItem('cart');
-                    
                     // Update UI
                     setTimeout(() => {
                         modal.classList.add('hidden');
-                        
-                        // Show success message with order details
                         showOrderSuccess(order);
                     }, 1000);
                 }
             }, 1500);
         }
 
+        function generateOrderId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return `UNIPORT-${timestamp}-${random}`;
+        }
+
+        function saveOrder(order) {
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            orders.unshift(order); // Add new order to beginning of array
+            localStorage.setItem('userOrders', JSON.stringify(orders));
+        }
+
         function showOrderSuccess(order) {
             const successHTML = `
                 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 text-center">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-check text-green-600 text-2xl"></i>
+                        <div class="success-checkmark">
+                            <i class="fas fa-check"></i>
                         </div>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">Payment Successful!</h3>
                         <p class="text-gray-600 mb-4">Thank you for your purchase. Your order has been confirmed.</p>
                         
                         <div class="bg-gray-50 p-4 rounded-lg mb-4 text-left">
                             <p class="text-sm text-gray-600 mb-2"><strong>Order ID:</strong> ${order.id}</p>
-                            <p class="text-sm text-gray-600 mb-2"><strong>Total Paid:</strong> ${order.total}</p>
+                            <p class="text-sm text-gray-600 mb-2"><strong>Total Paid:</strong> ₦${order.total.toLocaleString()}</p>
                             <p class="text-sm text-gray-600 mb-2"><strong>Delivery to:</strong> ${order.shippingInfo.department}</p>
                             <p class="text-sm text-gray-600"><strong>Estimated Delivery:</strong> Within 48 hours</p>
                         </div>
@@ -424,7 +720,7 @@
                             </p>
                         </div>
                         
-                        <div class="flex space-x-3">
+                        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                             <button onclick="continueShopping()" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
                                 Continue Shopping
                             </button>
@@ -441,14 +737,20 @@
 
         function continueShopping() {
             // Remove success modal
-            document.querySelector('.fixed.inset-0').remove();
+            const successModal = document.querySelector('.fixed.inset-0');
+            if (successModal) {
+                successModal.remove();
+            }
             // Redirect to books page
             window.location.href = 'books.html';
         }
 
         function viewOrder(orderId) {
             // Remove success modal
-            document.querySelector('.fixed.inset-0').remove();
+            const successModal = document.querySelector('.fixed.inset-0');
+            if (successModal) {
+                successModal.remove();
+            }
             // Redirect to order tracking
             window.location.href = `order-tracking.html?order=${orderId}`;
         }
@@ -487,115 +789,12 @@
             // Check if user is logged in
             const user = JSON.parse(localStorage.getItem('currentUser'));
             if (!user) {
-                alert('Please login to complete your purchase.');
-                window.location.href = 'login.html';
+                showToast('Please login to complete your purchase.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
             }
         });
-
-        // Add this to every page
-document.addEventListener('DOMContentLoaded', function() {
-    updateNavigation();
-});
-// Enhanced checkout functionality
-function processPayment() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    if (cart.length === 0) {
-        showToast('Your cart is empty. Please add some books before checking out.', 'error');
-        return;
-    }
-
-    // Validate shipping form
-    if (!validateForm()) {
-        showToast('Please fill in all required shipping information correctly.', 'error');
-        return;
-    }
-    
-    // Validate card details
-    if (!validateCardDetails()) {
-        return;
-    }
-
-    // Get form data
-    const formData = new FormData(document.getElementById('shippingForm'));
-    const shippingInfo = {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        department: formData.get('department'),
-        room: formData.get('room')
-    };
-
-    // Show processing modal
-    const modal = document.getElementById('paymentModal');
-    const processingText = document.getElementById('processingText');
-    modal.classList.remove('hidden');
-    
-    // Generate unique order ID
-    const orderId = generateOrderId();
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 500;
-    const tax = Math.round(subtotal * 0.075);
-    const total = subtotal + shipping + tax;
-    
-    // Create comprehensive order record
-    const order = {
-        id: orderId,
-        date: new Date().toISOString(),
-        items: [...cart], // Copy cart items
-        subtotal: subtotal,
-        shipping: shipping,
-        tax: tax,
-        total: total,
-        status: 'processing',
-        progress: 25,
-        shippingInfo: shippingInfo,
-        payment: {
-            method: 'paystack',
-            reference: document.getElementById('transactionRef').textContent,
-            status: 'completed',
-            timestamp: new Date().toISOString()
-        },
-        delivery: {
-            estimated: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
-            status: 'processing'
-        },
-        tracking: {
-            steps: [
-                { name: 'order_placed', completed: true, date: new Date().toISOString() },
-                { name: 'processing', completed: true, date: new Date().toISOString() },
-                { name: 'shipped', completed: false, date: null },
-                { name: 'out_for_delivery', completed: false, date: null },
-                { name: 'delivered', completed: false, date: null }
-            ]
-        }
-    };
-    
-    // Save order to localStorage
-    saveOrder(order);
-    
-    // Clear cart
-    localStorage.removeItem('cart');
-    
-    // Update UI
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        showOrderSuccess(order);
-    }, 2000);
-}
-
-function generateOrderId() {
-    const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 1000);
-    return `UNIPORT-${timestamp}-${random}`;
-}
-
-function saveOrder(order) {
-    const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
-    orders.unshift(order); // Add new order to beginning of array
-    localStorage.setItem('userOrders', JSON.stringify(orders));
-}
     </script>
 </body>
 </html>

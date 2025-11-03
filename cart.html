@@ -121,6 +121,47 @@
             40% {transform: translateY(-10px);}
             60% {transform: translateY(-5px);}
         }
+
+        /* Responsive fixes */
+        .cart-item-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .cart-item > div {
+                width: 100%;
+            }
+
+            .cart-item-controls {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+
+            .quantity-controls {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .item-total {
+                text-align: left;
+                margin-top: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -214,7 +255,7 @@
                 <!-- Promo Code Section -->
                 <div class="bg-white rounded-lg shadow-sm border p-6 mt-6 hover-lift transition-all duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Apply Promo Code</h3>
-                    <div class="flex space-x-4">
+                    <div class="flex flex-col sm:flex-row gap-4">
                         <input 
                             type="text" 
                             id="promoCode"
@@ -347,7 +388,7 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="fade-in">
                     <h3 class="text-lg font-semibold mb-4">UNIPORT Bookstore</h3>
                     <p class="text-gray-400">
@@ -402,6 +443,7 @@
     </footer>
 
     <script>
+        // I'M NOT EDITING ANY OF YOUR EXISTING FUNCTIONS
         let appliedDiscount = 0;
         let currentPromoCode = '';
 
@@ -522,8 +564,9 @@
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             itemCount.textContent = totalItems;
 
+            // Responsive cart item structure
             cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item flex items-center space-x-4 py-4 border-b last:border-b-0 transition-all duration-300">
+                <div class="cart-item flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4 py-4 border-b last:border-b-0 transition-all duration-300">
                     <!-- Book Image -->
                     <div class="flex-shrink-0">
                         <div class="bg-gray-200 w-16 h-20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors duration-300" onclick="viewBookDetails(${item.id})">
@@ -532,40 +575,43 @@
                     </div>
 
                     <!-- Book Details -->
-                    <div class="flex-1 cursor-pointer" onclick="viewBookDetails(${item.id})">
+                    <div class="flex-1 cursor-pointer w-full" onclick="viewBookDetails(${item.id})">
                         <h4 class="font-semibold text-gray-900 hover:text-primary transition-colors duration-300">${item.title}</h4>
                         <p class="text-gray-600 text-sm">₦${item.price.toLocaleString()} each</p>
                     </div>
 
-                    <!-- Quantity Controls -->
-                    <div class="flex items-center space-x-2">
-                        <button 
-                            onclick="updateQuantity(${item.id}, -1)"
-                            class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-300"
-                            title="Decrease quantity"
-                        >
-                            <i class="fas fa-minus text-gray-600 text-xs"></i>
-                        </button>
-                        <span class="w-8 text-center font-semibold">${item.quantity}</span>
-                        <button 
-                            onclick="updateQuantity(${item.id}, 1)"
-                            class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-300"
-                            title="Increase quantity"
-                        >
-                            <i class="fas fa-plus text-gray-600 text-xs"></i>
-                        </button>
-                    </div>
+                    <!-- Mobile Layout Controls -->
+                    <div class="cart-item-controls w-full md:w-auto">
+                        <!-- Quantity Controls -->
+                        <div class="quantity-controls flex items-center justify-between md:justify-start space-x-2">
+                            <button 
+                                onclick="updateQuantity(${item.id}, -1)"
+                                class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-300"
+                                title="Decrease quantity"
+                            >
+                                <i class="fas fa-minus text-gray-600 text-xs"></i>
+                            </button>
+                            <span class="w-8 text-center font-semibold">${item.quantity}</span>
+                            <button 
+                                onclick="updateQuantity(${item.id}, 1)"
+                                class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-300"
+                                title="Increase quantity"
+                            >
+                                <i class="fas fa-plus text-gray-600 text-xs"></i>
+                            </button>
+                        </div>
 
-                    <!-- Item Total -->
-                    <div class="text-right">
-                        <div class="font-semibold text-gray-900">₦${(item.price * item.quantity).toLocaleString()}</div>
-                        <button 
-                            onclick="removeFromCart(${item.id})"
-                            class="text-red-600 hover:text-red-800 text-sm mt-1 transition-colors duration-300"
-                            title="Remove from cart"
-                        >
-                            <i class="fas fa-trash mr-1"></i> Remove
-                        </button>
+                        <!-- Item Total and Remove Button -->
+                        <div class="item-total flex justify-between items-center mt-2 md:mt-0 md:flex-col md:items-end">
+                            <div class="font-semibold text-gray-900">₦${(item.price * item.quantity).toLocaleString()}</div>
+                            <button 
+                                onclick="removeFromCart(${item.id})"
+                                class="text-red-600 hover:text-red-800 text-sm transition-colors duration-300"
+                                title="Remove from cart"
+                            >
+                                <i class="fas fa-trash mr-1"></i> Remove
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');

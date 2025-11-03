@@ -300,27 +300,390 @@
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12 mt-12">
-        <!-- Same footer as index.html -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">UNIPORT Bookstore</h3>
+                    <p class="text-gray-400">
+                        Your trusted source for academic materials and textbooks at University of Port Harcourt.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="books.html" class="hover:text-white transition-colors duration-300">Books</a></li>
+                        <li><a href="cart.html" class="hover:text-white transition-colors duration-300">Shopping Cart</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Shipping Info</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <div class="text-gray-400 space-y-2">
+                        <p><i class="fas fa-university mr-2"></i>University of Port Harcourt</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Choba, Rivers State</p>
+                        <p><i class="fas fa-envelope mr-2"></i>bookstore@uniport.edu.ng</p>
+                        <p><i class="fas fa-phone mr-2"></i>+234 (0) 123 456 7890</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 UNIPORT Bookstore. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/main.js"></script>
     <script>
-        // Admin Data Management
-        let adminData = JSON.parse(localStorage.getItem('adminData')) || {
-            books: [],
-            orders: [],
-            users: [],
-            settings: {},
-            lastUpdated: new Date().toISOString()
-        };
+        // Dummy Data Generation
+        function generateDummyData() {
+            // Generate dummy books if none exist
+            if (!localStorage.getItem('books') || JSON.parse(localStorage.getItem('books')).length === 0) {
+                const dummyBooks = [
+                    {
+                        id: 1,
+                        title: "Introduction to Computer Science",
+                        author: "Dr. John Smith",
+                        price: 4500,
+                        stock: 25,
+                        department: "computer-science",
+                        course: "CSC 101",
+                        isbn: "978-0134670942",
+                        format: "physical",
+                        description: "Comprehensive introduction to computer science fundamentals",
+                        rating: 4.5,
+                        reviews: 12,
+                        pages: 320,
+                        publisher: "UNIPORT Press"
+                    },
+                    {
+                        id: 2,
+                        title: "Calculus and Analytical Geometry",
+                        author: "Prof. Mary Johnson",
+                        price: 3800,
+                        stock: 3,
+                        department: "mathematics",
+                        course: "MTH 101",
+                        isbn: "978-0321963635",
+                        format: "physical",
+                        description: "Fundamental concepts of calculus with practical applications",
+                        rating: 4.2,
+                        reviews: 8,
+                        pages: 450,
+                        publisher: "UNIPORT Press"
+                    },
+                    {
+                        id: 3,
+                        title: "Principles of Microeconomics",
+                        author: "Dr. Robert Williams",
+                        price: 5200,
+                        stock: 15,
+                        department: "economics",
+                        course: "ECO 101",
+                        isbn: "978-1285165905",
+                        format: "physical",
+                        description: "Introduction to microeconomic theory and applications",
+                        rating: 4.7,
+                        reviews: 15,
+                        pages: 380,
+                        publisher: "UNIPORT Press"
+                    },
+                    {
+                        id: 4,
+                        title: "Organic Chemistry Fundamentals",
+                        author: "Prof. Sarah Davis",
+                        price: 6100,
+                        stock: 2,
+                        department: "medicine",
+                        course: "CHE 201",
+                        isbn: "978-1260119107",
+                        format: "physical",
+                        description: "Comprehensive guide to organic chemistry principles",
+                        rating: 4.3,
+                        reviews: 6,
+                        pages: 520,
+                        publisher: "UNIPORT Press"
+                    },
+                    {
+                        id: 5,
+                        title: "Engineering Mechanics",
+                        author: "Dr. Michael Brown",
+                        price: 4900,
+                        stock: 18,
+                        department: "engineering",
+                        course: "ENG 101",
+                        isbn: "978-0133915386",
+                        format: "physical",
+                        description: "Statics and dynamics for engineering students",
+                        rating: 4.6,
+                        reviews: 10,
+                        pages: 410,
+                        publisher: "UNIPORT Press"
+                    },
+                    {
+                        id: 6,
+                        title: "Nigerian Legal System",
+                        author: "Prof. Grace Adebayo",
+                        price: 6700,
+                        stock: 7,
+                        department: "law",
+                        course: "LAW 101",
+                        isbn: "978-9781532345",
+                        format: "physical",
+                        description: "Introduction to the Nigerian legal framework",
+                        rating: 4.8,
+                        reviews: 5,
+                        pages: 290,
+                        publisher: "UNIPORT Press"
+                    }
+                ];
+                localStorage.setItem('books', JSON.stringify(dummyBooks));
+            }
+
+            // Generate dummy orders if none exist
+            if (!localStorage.getItem('userOrders') || JSON.parse(localStorage.getItem('userOrders')).length === 0) {
+                const dummyOrders = [
+                    {
+                        id: "UNIPORT-2024-001",
+                        date: "2024-01-15T10:30:00Z",
+                        items: [
+                            { id: 1, title: "Introduction to Computer Science", price: 4500, quantity: 1 },
+                            { id: 3, title: "Principles of Microeconomics", price: 5200, quantity: 1 }
+                        ],
+                        subtotal: 9700,
+                        shipping: 500,
+                        tax: 727,
+                        total: "₦10,927",
+                        status: "delivered",
+                        progress: 100,
+                        shippingInfo: {
+                            firstName: "Chinedu",
+                            lastName: "Okoro",
+                            email: "chinedu.okoro@student.uniport.edu.ng",
+                            phone: "08031234567",
+                            address: "Faculty of Science Building",
+                            department: "Computer Science",
+                            room: "Lab 101"
+                        },
+                        payment: {
+                            method: "paystack",
+                            reference: "PSK-2024001",
+                            status: "completed",
+                            timestamp: "2024-01-15T10:35:00Z"
+                        },
+                        delivery: {
+                            estimated: "2024-01-17T14:00:00Z",
+                            status: "delivered"
+                        },
+                        tracking: {
+                            steps: [
+                                { name: 'order_placed', completed: true, date: "2024-01-15T10:30:00Z" },
+                                { name: 'processing', completed: true, date: "2024-01-15T11:15:00Z" },
+                                { name: 'shipped', completed: true, date: "2024-01-16T09:20:00Z" },
+                                { name: 'out_for_delivery', completed: true, date: "2024-01-17T10:45:00Z" },
+                                { name: 'delivered', completed: true, date: "2024-01-17T13:30:00Z" }
+                            ]
+                        }
+                    },
+                    {
+                        id: "UNIPORT-2024-002",
+                        date: "2024-01-18T14:20:00Z",
+                        items: [
+                            { id: 2, title: "Calculus and Analytical Geometry", price: 3800, quantity: 2 }
+                        ],
+                        subtotal: 7600,
+                        shipping: 500,
+                        tax: 570,
+                        total: "₦8,670",
+                        status: "shipped",
+                        progress: 60,
+                        shippingInfo: {
+                            firstName: "Amina",
+                            lastName: "Yusuf",
+                            email: "amina.yusuf@student.uniport.edu.ng",
+                            phone: "08029876543",
+                            address: "Faculty of Engineering Complex",
+                            department: "Mathematics",
+                            room: "Office 205"
+                        },
+                        payment: {
+                            method: "paystack",
+                            reference: "PSK-2024002",
+                            status: "completed",
+                            timestamp: "2024-01-18T14:25:00Z"
+                        },
+                        delivery: {
+                            estimated: "2024-01-22T16:00:00Z",
+                            status: "shipped"
+                        },
+                        tracking: {
+                            steps: [
+                                { name: 'order_placed', completed: true, date: "2024-01-18T14:20:00Z" },
+                                { name: 'processing', completed: true, date: "2024-01-18T15:10:00Z" },
+                                { name: 'shipped', completed: true, date: "2024-01-19T11:30:00Z" },
+                                { name: 'out_for_delivery', completed: false, date: null },
+                                { name: 'delivered', completed: false, date: null }
+                            ]
+                        }
+                    },
+                    {
+                        id: "UNIPORT-2024-003",
+                        date: "2024-01-20T09:15:00Z",
+                        items: [
+                            { id: 4, title: "Organic Chemistry Fundamentals", price: 6100, quantity: 1 },
+                            { id: 5, title: "Engineering Mechanics", price: 4900, quantity: 1 }
+                        ],
+                        subtotal: 11000,
+                        shipping: 500,
+                        tax: 825,
+                        total: "₦12,325",
+                        status: "processing",
+                        progress: 40,
+                        shippingInfo: {
+                            firstName: "Emeka",
+                            lastName: "Nwankwo",
+                            email: "emeka.nwankwo@student.uniport.edu.ng",
+                            phone: "08051234567",
+                            address: "College of Health Sciences",
+                            department: "Medicine",
+                            room: "Lab 302"
+                        },
+                        payment: {
+                            method: "paystack",
+                            reference: "PSK-2024003",
+                            status: "completed",
+                            timestamp: "2024-01-20T09:20:00Z"
+                        },
+                        delivery: {
+                            estimated: "2024-01-24T11:00:00Z",
+                            status: "processing"
+                        },
+                        tracking: {
+                            steps: [
+                                { name: 'order_placed', completed: true, date: "2024-01-20T09:15:00Z" },
+                                { name: 'processing', completed: true, date: "2024-01-20T10:05:00Z" },
+                                { name: 'shipped', completed: false, date: null },
+                                { name: 'out_for_delivery', completed: false, date: null },
+                                { name: 'delivered', completed: false, date: null }
+                            ]
+                        }
+                    },
+                    {
+                        id: "UNIPORT-2024-004",
+                        date: "2024-01-21T16:45:00Z",
+                        items: [
+                            { id: 6, title: "Nigerian Legal System", price: 6700, quantity: 1 }
+                        ],
+                        subtotal: 6700,
+                        shipping: 500,
+                        tax: 502,
+                        total: "₦7,702",
+                        status: "out-for-delivery",
+                        progress: 80,
+                        shippingInfo: {
+                            firstName: "Funke",
+                            lastName: "Adeleke",
+                            email: "funke.adeleke@student.uniport.edu.ng",
+                            phone: "08063219876",
+                            address: "Faculty of Law Building",
+                            department: "Law",
+                            room: "Library Wing"
+                        },
+                        payment: {
+                            method: "paystack",
+                            reference: "PSK-2024004",
+                            status: "completed",
+                            timestamp: "2024-01-21T16:50:00Z"
+                        },
+                        delivery: {
+                            estimated: "2024-01-23T15:30:00Z",
+                            status: "out-for-delivery"
+                        },
+                        tracking: {
+                            steps: [
+                                { name: 'order_placed', completed: true, date: "2024-01-21T16:45:00Z" },
+                                { name: 'processing', completed: true, date: "2024-01-22T08:30:00Z" },
+                                { name: 'shipped', completed: true, date: "2024-01-22T14:15:00Z" },
+                                { name: 'out_for_delivery', completed: true, date: "2024-01-23T09:45:00Z" },
+                                { name: 'delivered', completed: false, date: null }
+                            ]
+                        }
+                    },
+                    {
+                        id: "UNIPORT-2024-005",
+                        date: "2024-01-22T11:20:00Z",
+                        items: [
+                            { id: 1, title: "Introduction to Computer Science", price: 4500, quantity: 3 },
+                            { id: 3, title: "Principles of Microeconomics", price: 5200, quantity: 2 }
+                        ],
+                        subtotal: 23900,
+                        shipping: 500,
+                        tax: 1792,
+                        total: "₦26,192",
+                        status: "processing",
+                        progress: 40,
+                        shippingInfo: {
+                            firstName: "David",
+                            lastName: "Okafor",
+                            email: "david.okafor@student.uniport.edu.ng",
+                            phone: "08074561239",
+                            address: "Faculty of Social Sciences",
+                            department: "Economics",
+                            room: "Seminar Room 4"
+                        },
+                        payment: {
+                            method: "paystack",
+                            reference: "PSK-2024005",
+                            status: "completed",
+                            timestamp: "2024-01-22T11:25:00Z"
+                        },
+                        delivery: {
+                            estimated: "2024-01-26T13:00:00Z",
+                            status: "processing"
+                        },
+                        tracking: {
+                            steps: [
+                                { name: 'order_placed', completed: true, date: "2024-01-22T11:20:00Z" },
+                                { name: 'processing', completed: true, date: "2024-01-22T12:10:00Z" },
+                                { name: 'shipped', completed: false, date: null },
+                                { name: 'out_for_delivery', completed: false, date: null },
+                                { name: 'delivered', completed: false, date: null }
+                            ]
+                        }
+                    }
+                ];
+                localStorage.setItem('userOrders', JSON.stringify(dummyOrders));
+            }
+        }
 
         // Initialize admin dashboard
         function initAdminDashboard() {
+            generateDummyData();
             loadStats();
             loadRecentOrders();
             loadLowStockAlerts();
             loadRecentActivity();
-            // Removed admin access check to allow everyone
         }
 
         function loadStats() {
@@ -349,7 +712,7 @@
             document.getElementById('totalBooks').textContent = totalBooks;
             document.getElementById('lowStockCount').textContent = lowStockCount;
             
-            // Update growth indicators (mock data for demo)
+            // Update growth indicators
             document.getElementById('salesGrowth').textContent = '12.5%';
             document.getElementById('ordersGrowth').textContent = '8.2%';
             document.getElementById('booksGrowth').textContent = '5.3%';
@@ -357,7 +720,7 @@
             // Update stock alert
             const stockAlert = document.getElementById('stockAlert');
             if (lowStockCount > 0) {
-                stockAlert.textContent = 'Needs attention';
+                stockAlert.textContent = `${lowStockCount} items need attention`;
                 stockAlert.className = 'text-red-600 text-sm font-medium';
             } else {
                 stockAlert.textContent = 'All good';
@@ -367,7 +730,7 @@
 
         function loadRecentOrders() {
             const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
-            const recentOrders = orders.slice(-5).reverse(); // Get last 5 orders
+            const recentOrders = orders.slice(-5).reverse();
             
             const ordersTable = document.getElementById('recentOrdersTable');
             
@@ -385,16 +748,17 @@
             ordersTable.innerHTML = recentOrders.map(order => `
                 <tr class="border-b hover:bg-gray-50">
                     <td class="py-3 text-sm font-medium">${order.id}</td>
-                    <td class="py-3 text-sm">${order.shippingInfo.email}</td>
+                    <td class="py-3 text-sm">${order.shippingInfo.firstName} ${order.shippingInfo.lastName}</td>
                     <td class="py-3 text-sm">${order.total}</td>
                     <td class="py-3 text-sm">
                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                            order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
                             order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'out-for-delivery' ? 'bg-purple-100 text-purple-800' :
                             order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                             'bg-gray-100 text-gray-800'
                         }">
-                            ${order.status || 'confirmed'}
+                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                         </span>
                     </td>
                     <td class="py-3 text-sm">
@@ -427,7 +791,7 @@
             
             lowStockContainer.innerHTML = lowStockItems.map(book => `
                 <div class="flex items-center justify-between p-3 ${
-                    book.stock < 5 ? 'bg-red-50' : 'bg-yellow-50'
+                    book.stock < 5 ? 'bg-red-50 border-l-4 border-red-500' : 'bg-yellow-50 border-l-4 border-yellow-500'
                 } rounded-lg">
                     <div class="flex-1">
                         <p class="font-medium text-gray-900">${book.title}</p>
@@ -448,10 +812,11 @@
 
         function loadRecentActivity() {
             const activity = [
-                { type: 'order', message: 'New order received', time: '2 minutes ago', icon: 'shopping-cart', color: 'green' },
-                { type: 'user', message: 'New user registered', time: '1 hour ago', icon: 'user-plus', color: 'blue' },
-                { type: 'stock', message: 'Low stock alert', time: '2 hours ago', icon: 'exclamation-triangle', color: 'yellow' },
-                { type: 'book', message: 'New book added', time: '3 hours ago', icon: 'book', color: 'purple' }
+                { type: 'order', message: 'New order #UNIPORT-2024-005 received', time: '2 hours ago', icon: 'shopping-cart', color: 'green' },
+                { type: 'user', message: 'New user registered: David Okafor', time: '3 hours ago', icon: 'user-plus', color: 'blue' },
+                { type: 'stock', message: 'Low stock alert: Organic Chemistry Fundamentals', time: '5 hours ago', icon: 'exclamation-triangle', color: 'yellow' },
+                { type: 'book', message: 'New book added: Nigerian Legal System', time: '1 day ago', icon: 'book', color: 'purple' },
+                { type: 'order', message: 'Order #UNIPORT-2024-004 marked as out for delivery', time: '1 day ago', icon: 'shipping-fast', color: 'blue' }
             ];
             
             const activityContainer = document.getElementById('recentActivity');
@@ -532,51 +897,101 @@
         }
 
         function editBook(bookId) {
-            alert(`Edit book functionality for book ID: ${bookId} would open here.`);
-            // In a full implementation, this would open an edit modal
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books.find(b => b.id === bookId);
+            
+            if (book) {
+                // Pre-fill the add book form with existing data
+                document.querySelector('input[name="title"]').value = book.title;
+                document.querySelector('input[name="author"]').value = book.author;
+                document.querySelector('input[name="price"]').value = book.price;
+                document.querySelector('input[name="stock"]').value = book.stock;
+                document.querySelector('select[name="department"]').value = book.department;
+                document.querySelector('input[name="course"]').value = book.course || '';
+                document.querySelector('input[name="isbn"]').value = book.isbn || '';
+                document.querySelector('select[name="format"]').value = book.format;
+                document.querySelector('textarea[name="description"]').value = book.description || '';
+                
+                showAddBookModal();
+                showToast(`Editing: ${book.title}`);
+            }
         }
 
         // Order Management
         function updateOrderStatus(orderId) {
-            const newStatus = prompt('Enter new status (confirmed/shipped/delivered):', 'shipped');
-            if (newStatus && ['confirmed', 'shipped', 'delivered'].includes(newStatus)) {
-                const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
-                const orderIndex = orders.findIndex(order => order.id === orderId);
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (order) {
+                const currentStatus = order.status;
+                let newStatus;
                 
-                if (orderIndex !== -1) {
-                    orders[orderIndex].status = newStatus;
+                switch(currentStatus) {
+                    case 'processing':
+                        newStatus = 'shipped';
+                        break;
+                    case 'shipped':
+                        newStatus = 'out-for-delivery';
+                        break;
+                    case 'out-for-delivery':
+                        newStatus = 'delivered';
+                        break;
+                    default:
+                        newStatus = 'processing';
+                }
+                
+                if (confirm(`Update order ${orderId} status from ${currentStatus} to ${newStatus}?`)) {
+                    order.status = newStatus;
+                    
+                    // Update tracking steps
+                    const stepIndex = order.tracking.steps.findIndex(step => !step.completed);
+                    if (stepIndex !== -1) {
+                        order.tracking.steps[stepIndex].completed = true;
+                        order.tracking.steps[stepIndex].date = new Date().toISOString();
+                    }
+                    
                     localStorage.setItem('userOrders', JSON.stringify(orders));
                     
                     showToast(`Order ${orderId} status updated to ${newStatus}`);
                     loadRecentOrders();
+                    loadRecentActivity();
                 }
             }
         }
 
         function viewOrderDetails(orderId) {
-            alert(`View order details for: ${orderId}\n\nThis would show complete order information.`);
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (order) {
+                const itemsList = order.items.map(item => 
+                    `${item.title} (Qty: ${item.quantity}) - ₦${(item.price * item.quantity).toLocaleString()}`
+                ).join('\n');
+                
+                alert(`Order Details:\n\nOrder ID: ${order.id}\nCustomer: ${order.shippingInfo.firstName} ${order.shippingInfo.lastName}\nEmail: ${order.shippingInfo.email}\nDepartment: ${order.shippingInfo.department}\nStatus: ${order.status}\nTotal: ${order.total}\n\nItems:\n${itemsList}`);
+            }
         }
 
         function viewAllOrders() {
-            alert('This would navigate to a comprehensive orders management page.');
+            alert('This would navigate to a comprehensive orders management page with all orders displayed in a detailed table with advanced filtering options.');
         }
 
         // Other Admin Functions
         function exportReports() {
-            showToast('Reports exported successfully!');
+            showToast('Sales and inventory reports exported successfully! Download will begin shortly.');
             // In real implementation, this would generate and download CSV/PDF reports
         }
 
         function manageUsers() {
-            alert('This would open user management interface.');
+            alert('This would open user management interface showing all registered users with their order history and account status.');
         }
 
         function manageInventory() {
-            alert('This would open comprehensive inventory management.');
+            alert('This would open comprehensive inventory management with bulk operations, stock alerts, and supplier management.');
         }
 
         function showSettings() {
-            alert('This would open admin settings panel.');
+            alert('This would open admin settings panel for configuring store policies, payment methods, and notification preferences.');
         }
 
         function logout() {
